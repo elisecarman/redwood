@@ -1,0 +1,172 @@
+{
+	"compiler": {
+		"version": "0.5.3+commit.10d17f24"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "testMe",
+						"type": "uint256"
+					}
+				],
+				"name": "testing",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "_token0",
+						"type": "address"
+					},
+					{
+						"name": "_token1",
+						"type": "address"
+					},
+					{
+						"name": "_dex",
+						"type": "address"
+					},
+					{
+						"name": "whichP",
+						"type": "uint256"
+					},
+					{
+						"name": "_tickerQ",
+						"type": "bytes32"
+					},
+					{
+						"name": "_tickerT",
+						"type": "bytes32"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					}
+				],
+				"name": "deposit",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {
+				"deposit(uint256,bytes32)": {
+					"notice": "should I call and ERC 20 method?"
+				},
+				"initialize(address,address,address,uint256,bytes32,bytes32)": {
+					"notice": "make and send limit order?"
+				},
+				"withdraw(uint256,bytes32)": {
+					"notice": "withdraw method"
+				}
+			}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"redwoodStencil/contracts/Pool.sol": "Pool"
+		},
+		"evmVersion": "byzantium",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"redwoodStencil/contracts/Exc.sol": {
+			"keccak256": "0x1901e14b5e655f6931697e5e9a704aff2ce8cbe342d0dcdfa37adbef149b5711",
+			"urls": [
+				"bzzr://74fb8686a24e196d8c550db10cda4f94b0432e490eab3d843a2818ea14825255"
+			]
+		},
+		"redwoodStencil/contracts/IExc.sol": {
+			"keccak256": "0x63895dbe7e3109bcdea421cd19b005e63775b107695bc63bbd6f8cc52ced3f03",
+			"urls": [
+				"bzzr://6dadffe7a8019cf9369e5e48fa140dc17577735cacafd6a124a14afbf83deab0"
+			]
+		},
+		"redwoodStencil/contracts/Pool.sol": {
+			"keccak256": "0x53542af33c40c48b377e9617752d1c135187bdeeb74b4822fca5c8bd45612ca3",
+			"urls": [
+				"bzzr://c237791c373e772c16858441b6a50d67093313d6f4898cf4c1d26f64782ba2ee"
+			]
+		},
+		"redwoodStencil/contracts/libraries/GSN/Context.sol": {
+			"keccak256": "0x98d9c3f119eabc9384b14d85702d9a1249760fc32ae8cb295f1071a064c6733a",
+			"urls": [
+				"bzzr://beced7f16902f6de97148603c79e526e72d5244a56fb76d500ee3b857ff9bb47"
+			]
+		},
+		"redwoodStencil/contracts/libraries/math/SafeMath.sol": {
+			"keccak256": "0xeb295b448107f6adee6c0861eba7cd58983eeb1a2bf9cd24b3df9c75fe17db75",
+			"urls": [
+				"bzzr://cdb2eefb0ce6e610ee1b981cdaed5906eaeff5363d4cc6f3df854c93148c3916"
+			]
+		},
+		"redwoodStencil/contracts/libraries/token/ERC20/ERC20.sol": {
+			"keccak256": "0x5394db3bea189ac8c117f957e21f2b4369e7987ba8520613a5c62e56ba751d58",
+			"urls": [
+				"bzzr://0d796e6f2827d5f4250e338ce5fdf732941f542fd8ea4fac2a880590eb260796"
+			]
+		},
+		"redwoodStencil/contracts/libraries/token/ERC20/IERC20.sol": {
+			"keccak256": "0xd45135fede71fe4b2f06ccc22c459f880912785065a13f5ebf85ebe3d07d632e",
+			"urls": [
+				"bzzr://f039f90386b495b4615922fc5eb29b8659ab0eff8fc1895624b4e5b77ceee009"
+			]
+		}
+	},
+	"version": 1
+}
