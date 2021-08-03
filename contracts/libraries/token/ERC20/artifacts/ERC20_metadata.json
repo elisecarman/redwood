@@ -260,7 +260,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"redwoodStencil/contracts/libraries/token/ERC20/ERC20.sol": "ERC20"
+			"contracts/libraries/token/ERC20/ERC20.sol": "ERC20"
 		},
 		"evmVersion": "byzantium",
 		"libraries": {},
@@ -271,25 +271,25 @@
 		"remappings": []
 	},
 	"sources": {
-		"redwoodStencil/contracts/libraries/GSN/Context.sol": {
+		"contracts/libraries/GSN/Context.sol": {
 			"keccak256": "0x98d9c3f119eabc9384b14d85702d9a1249760fc32ae8cb295f1071a064c6733a",
 			"urls": [
 				"bzzr://beced7f16902f6de97148603c79e526e72d5244a56fb76d500ee3b857ff9bb47"
 			]
 		},
-		"redwoodStencil/contracts/libraries/math/SafeMath.sol": {
+		"contracts/libraries/math/SafeMath.sol": {
 			"keccak256": "0xeb295b448107f6adee6c0861eba7cd58983eeb1a2bf9cd24b3df9c75fe17db75",
 			"urls": [
 				"bzzr://cdb2eefb0ce6e610ee1b981cdaed5906eaeff5363d4cc6f3df854c93148c3916"
 			]
 		},
-		"redwoodStencil/contracts/libraries/token/ERC20/ERC20.sol": {
+		"contracts/libraries/token/ERC20/ERC20.sol": {
 			"keccak256": "0x5394db3bea189ac8c117f957e21f2b4369e7987ba8520613a5c62e56ba751d58",
 			"urls": [
 				"bzzr://0d796e6f2827d5f4250e338ce5fdf732941f542fd8ea4fac2a880590eb260796"
 			]
 		},
-		"redwoodStencil/contracts/libraries/token/ERC20/IERC20.sol": {
+		"contracts/libraries/token/ERC20/IERC20.sol": {
 			"keccak256": "0xd45135fede71fe4b2f06ccc22c459f880912785065a13f5ebf85ebe3d07d632e",
 			"urls": [
 				"bzzr://f039f90386b495b4615922fc5eb29b8659ab0eff8fc1895624b4e5b77ceee009"

@@ -57,7 +57,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"redwoodStencil/contracts/Migrations.sol": "Migrations"
+			"contracts/Migrations.sol": "Migrations"
 		},
 		"evmVersion": "byzantium",
 		"libraries": {},
@@ -68,7 +68,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"redwoodStencil/contracts/Migrations.sol": {
+		"contracts/Migrations.sol": {
 			"keccak256": "0x70cf7ad76347f1e37197351f671d6033be2f1d514fd6f018d495c85494b951f0",
 			"urls": [
 				"bzzr://bd574feed31db1cadb3993496445feb7fe9ad310c2c77b18294c0624ca35633b"

@@ -1,0 +1,36 @@
+{
+	"compiler": {
+		"version": "0.5.3+commit.10d17f24"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/IHeap.sol": "IHeap"
+		},
+		"evmVersion": "byzantium",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/IHeap.sol": {
+			"keccak256": "0x39f1920f701abdffbf8f1f8adf810caa58e3d78b2954411743e457c1b5bf3524",
+			"urls": [
+				"bzzr://c7385c562667cc18af9ebf3ed7bb327dcb9bb0b8c37e9ff3ee779c4ee5521e76"
+			]
+		}
+	},
+	"version": 1
+}

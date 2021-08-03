@@ -90,20 +90,20 @@ contract Pool {
                 token1T,
                 IExc.Side.BUY);
         
-        idBuy = IExc.getNextID();
+        idBuy = uint256(IExc(dex).getNextID());
         
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,  //what amount??
                 newPrice(),
-                idBuy);
+                IExc.Side.BUY);
                 
-        idSell = IExc.getNextID;        
+        idSell = uint256(IExc(dex).getNextID());        
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,    //what amount??
                 newPrice(),
-                idSell);
+                IExc.Side.SELL);
         
     }
     

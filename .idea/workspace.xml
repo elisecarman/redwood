@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40f5dbb2-ba64-43df-9e44-8eb22f1d9956" name="Default Changelist" comment="" />
+    <list default="true" id="40f5dbb2-ba64-43df-9e44-8eb22f1d9956" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/Exc.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/Exc.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/Pool.sol" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/Pool.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Exc.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Exc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Exc_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Exc_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Factory.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Factory.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Factory_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Factory_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Migrations.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Migrations.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Migrations_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Migrations_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Pool.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Pool.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/artifacts/Pool_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/artifacts/Pool_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/libraries/token/ERC20/artifacts/ERC20.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/libraries/token/ERC20/artifacts/ERC20.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/libraries/token/ERC20/artifacts/ERC20_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/libraries/token/ERC20/artifacts/ERC20_metadata.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,7 +60,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../redwoodSolution" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -92,11 +106,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Solidity.dex.createMarketOrder" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
