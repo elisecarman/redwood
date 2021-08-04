@@ -44,31 +44,47 @@ contract Pool {
     // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
     // both tokens at the same time
     function deposit(uint tokenAmount, uint pineAmount) external {
-         if (walletP[msg.sender] >= pineAmount && pineAmount != 0){  //
+       ///what if we have the correct tokenAmount but not correct pineAmount? Vice Versa?
         
-        IExc(dex).withdraw(pineAmount, "PIN"); //does this recognize PIN?
-        walletP[msg.sender] += pineAmount;
-        amountTokenP += pineAmount;
-        //do we update wallet in exchange?
-        
-        }
-        
-    if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
-        //should we use transfer here?
-            wallet1[msg.sender] += tokenAmount;
-            amountToken1 += tokenAmount;
-            }
-            updateOrders(amountToken1);
+        //transfer from
+        //1) transferFrom msg.sender to current contract
+      
+    if (IERC20(tokenP).transferFrom(msg.sender, dex, pineAmount)){
+        //walletP[msg.sender] += pineAmount;
+        //amountTokenP += pineAmount; 
+        walletP[msg.sender] = SafeMath.add(walletP[msg.sender], pineAmount);
+        amountTokenP = SafeMath.add(amountTokenP, pineAmount);
     }
+    
+    if (IERC20(token1).transferFrom(msg.sender, dex, tokenAmount)){
+        //wallet1[msg.sender] += tokenAmount;
+        //amountToken1 += tokenAmount; //use SafeMath
+        wallet1[msg.sender] = SafeMath.add(wallet1[msg.sender], tokenAmount);
+        amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
+        
+    }
+        updateOrders(amountToken1);
+
+   }
 
     function withdraw(uint tokenAmount, uint pineAmount) external {
+        
     if (walletP[msg.sender] >= pineAmount && pineAmount != 0){
-        walletP[msg.sender] -= pineAmount;
-        amountTokenP -= pineAmount;
+        walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
+     //   walletP[msg.sender] -= pineAmount;
+    //    amountTokenP -= pineAmount;
+        amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
+        
+        IERC20(tokenP).transfer(msg.sender, pineAmount);
+        
         }
     if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
-            wallet1[msg.sender] -= tokenAmount;
-            amountToken1 -= tokenAmount;
+            wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
+           // wallet1[msg.sender] -= tokenAmount;
+            
+        amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
+          //  amountToken1 -= tokenAmount;
+            IERC20(token1).transfer(msg.sender, tokenAmount);
             }
         
             updateOrders(amountToken1);
@@ -97,14 +113,14 @@ contract Pool {
         
             IExc(dex).makeLimitOrder(
                 token1T,
-                amount,  //what amount??
+                amount,  
                 newPrice(),
                 IExc.Side.BUY);
                 
         idSell = uint256(IExc(dex).getNextID());        
             IExc(dex).makeLimitOrder(
                 token1T,
-                amount,    //what amount??
+                amount,    
                 newPrice(),
                 IExc.Side.SELL);
         

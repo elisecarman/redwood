@@ -19,7 +19,7 @@ contract Factory {
         bytes32 tickerT) external returns (address pair) {
         // todo: fill in the require conditions
         ///why does "PIN" work and not PIN?
-        require(tickerQ == "PIN", 'First token in pair is not quote token');
+        require(tickerQ == bytes32("PIN") , 'First token in pair is not quote token');
         require(tokenA != tokenB, 'Identical addresses');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
         uint whichP = tokenA < tokenB ? 1 : 2;

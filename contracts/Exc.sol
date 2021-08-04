@@ -112,10 +112,12 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
+            if (contains_token[ticker]){
             IERC20(tokens[ticker].tokenAddress).transferFrom(msg.sender, address(this), amount); 
             ///how to find address of exchange?
             
             traderBalances[msg.sender][ticker] += amount; 
+            }
     }
     
     // todo: implement withdraw, which should do the opposite of deposit. The trader should not be able to withdraw more than
@@ -171,6 +173,7 @@ contract Exc is IExc{
         uint id,
         bytes32 ticker,
         Side side) external returns (bool) {
+            require(contains_token[ticker] && ticker != PIN);
             
             Order memory o = orders[id];
             if (msg.sender == o.trader){
@@ -209,7 +212,13 @@ contract Exc is IExc{
             ///what does side indicate in the inputs?
             //msg sender wants to buy an item
             //msg sender wants to interract with the buy side (thus sell)
+            
              if (side == IExc.Side.BUY){
+                 
+                 require(contains_token[ticker]);
+                 require(traderBalances[msg.sender]["PIN"] >= amount);
+                 require(ticker != "PIN");
+                 
                  uint id = allSellBooks[ticker].getMax().id;
                  uint new_amount = amount;
                  
@@ -239,7 +248,6 @@ contract Exc is IExc{
                   delete(orders[id]); 
                   allOrders[id]= 0;
                   id = allSellBooks[ticker].getMax().id;
-                  
                   }
                   orders[id].filled += new_amount;
                   
