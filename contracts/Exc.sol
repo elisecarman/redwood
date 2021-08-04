@@ -4,17 +4,12 @@ pragma experimental ABIEncoderV2;
 /// @notice these commented segments will differ based on where you're deploying these contracts. If you're deploying
 /// on remix, feel free to uncomment the github imports, otherwise, use the uncommented imports
 
-//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/token/ERC20/IERC20.sol";
-//import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/math/SafeMath.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/math/SafeMath.sol";
 import '../contracts/libraries/token/ERC20/ERC20.sol';
 import '../contracts/libraries/math/SafeMath.sol';
 import "./IExc.sol";
 import "./Heap.sol";
-
-///what are sides? buy vs sell
-
-///how to use ERC 20 token functions?
-
 
 contract Exc is IExc{
     /// @notice simply notes that we are using SafeMath for uint, since Solidity's math is unsafe. For all the math
@@ -22,41 +17,45 @@ contract Exc is IExc{
     /// built-in operators.
     using SafeMath for uint;
     using Heap for Heap.Data;
-
-     mapping(bytes32 => Heap.Data) public allSellBooks;
-
-     mapping(bytes32 => Heap.Data) public allBuyBooks;
     
-    //the balances of the traders
-    //trader => token => amount
-    mapping(address => mapping(bytes32 => uint)) public traderBalances;
-    uint[] public allOrders;
-
-    ///id ticker
-    uint public id_ticker;
-    uint public trade_ticker;
-    uint public market_order_ticker;
-    
-    //and the IDs of the next trades and orders. ///
-    mapping(uint => Order) public orders;
-    
-    //Reference the NewTrade event and the IExc
+    /// @notice these declarations are incomplete. You will still need a way to store the orderbook, the balances
+    /// of the traders, and the IDs of the next trades and orders. Reference the NewTrade event and the IExc
     /// interface for more details about orders and sides.
+    
+    mapping(bytes32 => Heap.Data) public allSellBooks;
+
+    mapping(bytes32 => Heap.Data) public allBuyBooks;
+    
     mapping(bytes32 => Token) public tokens;
     bytes32[] public tokenList;
     mapping(bytes32 => bool) public contains_token;
     bytes32 constant PIN = bytes32('PIN');
     
+
+    /// @notice, this is the more standardized form of the main wallet data structure, if you're using something a bit
+    /// different, implementing a function that just takes in the address of the trader and then the ticker of a
+    /// token instead would suffice
+    mapping(address => mapping(bytes32 => uint)) public traderBalances;
+    
+    uint public id_ticker;
+    uint public trade_ticker;
+    uint public market_order_ticker;
+    
+    
+    mapping(uint => Order) public orders;
+    uint[] public allOrders;
+     
+    
     /// @notice an event representing all the needed info regarding a new trade on the exchange
     event NewTrade(
-        uint tradeId, // --> documents exchange  ///when an order is fulfilled create trad and trade id
-        uint orderId, //original order
+        uint tradeId,
+        uint orderId,
         bytes32 indexed ticker,
         address indexed trader1,
         address indexed trader2,
         uint amount,
         uint price,
-        uint date  //now
+        uint date
     );
     
     // todo: implement getOrders, which simply returns the orders for a specific token on a specific side
@@ -68,7 +67,6 @@ contract Exc is IExc{
       returns(Order[] memory) {
         uint i;
         uint j;
-          
         Order[] memory order_list = new Order[](allOrders.length);
         
         for (i = 0; i < allOrders.length; i++) {  
@@ -76,19 +74,16 @@ contract Exc is IExc{
             order_list[j] = orders[allOrders[i]];
             j++;
         }
-        
         i++;
         }
-       
-}
+    }
 
     // todo: implement getTokens, which simply returns an array of the tokens currently traded on in the exchange
     function getTokens() 
       external 
       view 
       returns(Token[] memory) {
-         uint i;
-         
+        uint i;
         Token[] memory tok_list = new Token[](tokenList.length);
           for (i = 0; i < tokenList.length; i++) {
          tok_list[i]= tokens[tokenList[i]];
@@ -101,11 +96,13 @@ contract Exc is IExc{
         bytes32 ticker,
         address tokenAddress)
         external {
-       Token memory newToken = Token(ticker, tokenAddress);
-       tokens[ticker] = newToken;
-       tokenList.length++;
-       tokenList.push(ticker);
-       contains_token[ticker] = true;
+        if (!contains_token[ticker]){
+            Token memory newToken = Token(ticker, tokenAddress);
+        tokens[ticker] = newToken;
+        tokenList.length++;
+        tokenList.push(ticker);
+        contains_token[ticker] = true;
+        }
     }
     
     // todo: implement deposit, which should deposit a certain amount of tokens from a trader to their on-exchange wallet,
@@ -115,14 +112,10 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
-            //use ERC 20 functions
-           
-           
             IERC20(tokens[ticker].tokenAddress).transferFrom(msg.sender, address(this), amount); 
             ///how to find address of exchange?
             
             traderBalances[msg.sender][ticker] += amount; 
-            
     }
     
     // todo: implement withdraw, which should do the opposite of deposit. The trader should not be able to withdraw more than
@@ -131,11 +124,10 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
-            
-            if (traderBalances[msg.sender][ticker] >= amount){
+                        if (traderBalances[msg.sender][ticker] >= amount){
             if (IERC20(tokens[ticker].tokenAddress).approve(address(this), amount)){
-            IERC20(tokens[ticker].tokenAddress).transferFrom(address(this), msg.sender, amount);
-}
+            IERC20(tokens[ticker].tokenAddress).transfer(msg.sender, amount);
+            }
             traderBalances[msg.sender][ticker] -= amount;
             }
     }
@@ -146,10 +138,6 @@ contract Exc is IExc{
     
     // todo: implement a sorting algorithm for limit orders, based on best prices for market orders having the highest priority.
     // i.e., a limit buy order with a high price should have a higher priority in the orderbook.
-    
-    ///should make LimitOrder involve placing it in the orderbook?
-    
-    //Can we return an id?
     function makeLimitOrder(
         bytes32 ticker,
         uint amount,
@@ -157,7 +145,7 @@ contract Exc is IExc{
         Side side)
         external {
             
-        require(ticker != PIN && contains_token[ticker]);    
+        require(ticker != PIN && contains_token[ticker] && traderBalances[msg.sender][ticker] >= amount);    
             
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
@@ -165,11 +153,11 @@ contract Exc is IExc{
         uint i;
         
         if (side == IExc.Side.SELL){
-       allSellBooks[ticker].insert(price, id_ticker);
+            ///negative input price for a Min priority heap
+       allSellBooks[ticker].insert(-(price), id_ticker);
        
         } else if (side == IExc.Side.BUY){
         allBuyBooks[ticker].insert(price, order_id);
-        
         }
         
         orders[order_id] = newOrder; 
@@ -182,14 +170,17 @@ contract Exc is IExc{
         function deleteLimitOrder(
         uint id,
         bytes32 ticker,
-        Side side) external returns (bool) {  ///here we are not using side. will side and o.side always be the same?
+        Side side) external returns (bool) {
+            
             Order memory o = orders[id];
             if (msg.sender == o.trader){
                 Heap.Node memory removed;
              if (o.side == IExc.Side.BUY){
+                 //if cancel buy order, get refunded Pine?
                 removed = allBuyBooks[ticker].extractById(id);
              }
             else if (o.side == IExc.Side.SELL){
+                //if cancel sell order, get refunded TOken 1
                 //orders[id] = 0;
                 removed = allSellBooks[ticker].extractById(id);
                 ///delete from order book
@@ -215,13 +206,15 @@ contract Exc is IExc{
         uint amount,
         Side side)
         external {
-            
-          if (side == IExc.Side.BUY){
-                 uint id = allBuyBooks[ticker].getMax().id;
+            ///what does side indicate in the inputs?
+            //msg sender wants to buy an item
+            //msg sender wants to interract with the buy side (thus sell)
+             if (side == IExc.Side.BUY){
+                 uint id = allSellBooks[ticker].getMax().id;
                  uint new_amount = amount;
                  
                   while ((orders[id].amount - orders[id].filled) <= new_amount){
-                  Heap.Node memory removedMax = allBuyBooks[ticker].extractMax();
+                  Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
                   uint new_amount = amount - (orders[id].amount - orders[id].filled);
                   
                   emit NewTrade(trade_ticker, 
@@ -233,10 +226,19 @@ contract Exc is IExc{
                             orders[id].price,
                             now);
                             
+                //update balances- Buyer
+                traderBalances[msg.sender][ticker] += new_amount;
+                traderBalances[msg.sender][PIN] -= new_amount;
+                
+                //update balances- Seller
+                traderBalances[orders[id].trader][ticker] -= new_amount;
+                traderBalances[orders[id].trader][PIN] += new_amount;
+                
+                   //update information     
                   trade_ticker++;          
                   delete(orders[id]); 
                   allOrders[id]= 0;
-                  id = allBuyBooks[ticker].getMax().id;
+                  id = allSellBooks[ticker].getMax().id;
                   
                   }
                   orders[id].filled += new_amount;
@@ -255,11 +257,11 @@ contract Exc is IExc{
                  
               //record event
              } else if (side == IExc.Side.SELL){
-               uint id = allSellBooks[ticker].getMax().id;
+               uint id = allBuyBooks[ticker].getMax().id;
                  uint new_amount = amount;
                  
                   while ((orders[id].amount - orders[id].filled) <= new_amount){
-                  Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
+                  Heap.Node memory removedMax = allBuyBooks[ticker].extractMax();
                   new_amount = amount - (orders[id].amount - orders[id].filled);
                   
                    emit NewTrade(trade_ticker, 
@@ -270,16 +272,26 @@ contract Exc is IExc{
                             orders[id].amount - orders[id].filled,
                             orders[id].price,
                             now);
-                            
                   trade_ticker++; 
                   
+                  //update balances- Seller
+                traderBalances[msg.sender][ticker] -= new_amount;
+                traderBalances[msg.sender][PIN] += new_amount;
+                
+                //update balances- Buyer
+                traderBalances[orders[id].trader][ticker] += new_amount;
+                traderBalances[orders[id].trader][PIN] -= new_amount;
+                 
+                 //update information 
                   delete(orders[id]);
                   allOrders[id] = 0;
-                  id = allSellBooks[ticker].getMax().id;
+                  id = allBuyBooks[ticker].getMax().id;
                   
                   
                   }
                   orders[id].filled += new_amount;
+                  
+                  ///should I emit trade for market order itself or is that repetitive
                    emit NewTrade(trade_ticker, 
                             id,
                             ticker,
@@ -291,14 +303,13 @@ contract Exc is IExc{
                             
                 trade_ticker++; 
              }   
-            
-    }
-    
-    
-    function getNextID() external returns (uint){
-        return id_ticker;
     }
     
     //todo: add modifiers for methods as detailed in handout
     
+      function getNextID() external returns (uint){
+        return id_ticker;
+    }
+
 }
+

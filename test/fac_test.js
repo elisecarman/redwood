@@ -37,6 +37,6 @@ contract('Factory', (accounts) => {
         let poolAd = log.args.pair;
         const pool = await Pool.at(poolAd);
         const checkMe = await pool.testing(1);
-        assert.equal(checkMe, 5);
+        assert(checkMe, 5);
     });
 });

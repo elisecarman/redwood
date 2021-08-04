@@ -20,7 +20,7 @@ interface IExc {
         Side side;
         bytes32 ticker;
         uint amount;
-        uint filled;  ///what is in filled?
+        uint filled;
         uint price;
         uint date;
     }
@@ -74,7 +74,7 @@ interface IExc {
         Side side)
         external;
         
+    
     function getNextID() external returns (uint);
-        
-        
 }
+

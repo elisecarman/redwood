@@ -511,12 +511,7 @@
 			"methods": {}
 		},
 		"userdoc": {
-			"methods": {
-				"makeLimitOrder(bytes32,uint256,uint256,uint8)": {
-					"notice": "should make LimitOrder involve placing it in the orderbook?"
-				}
-			},
-			"notice": "how to use ERC 20 token functions?"
+			"methods": {}
 		}
 	},
 	"settings": {
@@ -533,9 +528,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x558b9cec1d3a1cfec503cbcf10681b93834f53772414f5f9a991a7e29352d968",
+			"keccak256": "0xa569648cb7b2e45035d4cd6cd18d5d30b8efeb938bdb5ad85f9deb775d9b1ab2",
 			"urls": [
-				"bzzr://b33dd22b69d988b032a2ab83bba6f415284ee0ed6843bcd5447e00833d26c5bb"
+				"bzzr://379c021cbe50482384fecfb3a12f98a9c47caf54df9ac6f231d30991102f82cd"
 			]
 		},
 		"contracts/Heap.sol": {
@@ -545,9 +540,9 @@
 			]
 		},
 		"contracts/IExc.sol": {
-			"keccak256": "0xe9b10cb9900cbc02048dc2c5ac301a07c5763310fe50a1e990fc37657284cdf3",
+			"keccak256": "0xf7d6d0bde859ffb3fadae33eec475bc70076152199cafaef15c08f5569dfde82",
 			"urls": [
-				"bzzr://d81872d6eda7eee68651de9e81a1b628591948fae1cd4f670c015790c83031c3"
+				"bzzr://848b90305a48580b0b5b820b513cd45eaf37033a513d3d94492c3417ad733ff6"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {

@@ -25,25 +25,6 @@
 				"type": "function"
 			},
 			{
-				"constant": true,
-				"inputs": [
-					{
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "allPairs2",
-				"outputs": [
-					{
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"constant": false,
 				"inputs": [
 					{
@@ -142,9 +123,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/Factory.sol": "Factory"
+			"contracts/Fac.sol": "Factory"
 		},
-		"evmVersion": "byzantium",
+		"evmVersion": "constantinople",
 		"libraries": {},
 		"optimizer": {
 			"enabled": false,
@@ -154,51 +135,51 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x7f7634f5d8802e2cfd7b1c736802178fac1b04677051776ed604806c27051f2a",
+			"keccak256": "0xa0fc2209e84a67a06ac630638d32c867e1af137aa291bac0e53f05aa3cd22184",
 			"urls": [
-				"bzzr://b04be117c13528e11db2d9eb63cb477b8d37bfd9401c76f6404915e518603221"
+				"bzzr://bda97700e43a38e975b30ee637d2e605e12e1a174cd36fa9ff8c6124a68d6f03"
 			]
 		},
-		"contracts/Factory.sol": {
-			"keccak256": "0xbe33a892e71de3c41b171360083e0047ccdb70dfb4147262d07a78e2bca1d089",
+		"contracts/Fac.sol": {
+			"keccak256": "0x063d7a547b8d65fb2e56170f8b5715d6385fa04aa3f66a85c2ecde9a1ec89801",
 			"urls": [
-				"bzzr://1c44f87c10594adfe9420a94b0ecc7e487d33bd6bdf43f1c8795dab79e354ace"
+				"bzzr://d696c625dfbbe375a9715588e0fb22ddb94a8db880ac5a7cf7f9f83d8bc4ae6c"
 			]
 		},
 		"contracts/IExc.sol": {
-			"keccak256": "0xe9b10cb9900cbc02048dc2c5ac301a07c5763310fe50a1e990fc37657284cdf3",
+			"keccak256": "0x70cfd229f740886ae980aefe80605fccdb1ae3987edeafffca9c663f045b87a8",
 			"urls": [
-				"bzzr://d81872d6eda7eee68651de9e81a1b628591948fae1cd4f670c015790c83031c3"
+				"bzzr://c4021060be9fe362571005c3126d7fbacc1e9ab5efbd4c64240d00723d6c4a21"
 			]
 		},
 		"contracts/Pool.sol": {
-			"keccak256": "0x562d30747f9829b3143da51a58a9e82c1f8476e935b2cffaf4c25c1833770910",
+			"keccak256": "0xf064f28625bb1380d86f5a68f4c3b258c861c0feb7513033d8fee53a66862c88",
 			"urls": [
-				"bzzr://dc007849a5bb347d105aa55f8fe242e73640a4d986af66b6b4a43920f93c843c"
+				"bzzr://982299ba4f97c53a12f30a04ceaa36049f1645327038587ec6cc55328c565f08"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {
-			"keccak256": "0x98d9c3f119eabc9384b14d85702d9a1249760fc32ae8cb295f1071a064c6733a",
+			"keccak256": "0x90a3995645af7562d84b9d69363ffa5ae7217714ab61e951bf7bc450f40e4061",
 			"urls": [
-				"bzzr://beced7f16902f6de97148603c79e526e72d5244a56fb76d500ee3b857ff9bb47"
+				"bzzr://51482c01bddf23793bddee43b60ab9578a62948a4f2082def24ea792a553b055"
 			]
 		},
 		"contracts/libraries/math/SafeMath.sol": {
-			"keccak256": "0xeb295b448107f6adee6c0861eba7cd58983eeb1a2bf9cd24b3df9c75fe17db75",
+			"keccak256": "0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076",
 			"urls": [
-				"bzzr://cdb2eefb0ce6e610ee1b981cdaed5906eaeff5363d4cc6f3df854c93148c3916"
+				"bzzr://292843005e754e752644f767477ec5ad7a1ffc91ddb18c38b8079c62f3993cad"
 			]
 		},
 		"contracts/libraries/token/ERC20/ERC20.sol": {
-			"keccak256": "0x5394db3bea189ac8c117f957e21f2b4369e7987ba8520613a5c62e56ba751d58",
+			"keccak256": "0xb15af804e2bc97db51e4e103f13de9fe13f87e6b835d7a88c897966c0e58506e",
 			"urls": [
-				"bzzr://0d796e6f2827d5f4250e338ce5fdf732941f542fd8ea4fac2a880590eb260796"
+				"bzzr://6200c125af376381ae6c5415b8f3c1cb83889be20a7a51d67ac607487a10313b"
 			]
 		},
 		"contracts/libraries/token/ERC20/IERC20.sol": {
-			"keccak256": "0xd45135fede71fe4b2f06ccc22c459f880912785065a13f5ebf85ebe3d07d632e",
+			"keccak256": "0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9",
 			"urls": [
-				"bzzr://f039f90386b495b4615922fc5eb29b8659ab0eff8fc1895624b4e5b77ceee009"
+				"bzzr://cf2d583b8dce38d0617fdcd65f2fd9f126fe17b7f683b5a515ea9d2762d8b062"
 			]
 		}
 	},

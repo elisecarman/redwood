@@ -18,60 +18,63 @@ contract Pool {
     uint private price;
     uint private idSell;
     uint private idBuy;
-    
-    ///this maps a user address to an int: amount of Token1 
+    // todo: create wallet data structures
     mapping(address => uint) walletP;
     mapping(address => uint) wallet1;
     
-    // todo: create wallet data structures
-    ///keeps track of the balances that traders have put into the pool.
-    
-    //questions: how much should limit orders output?
-    
-    ///deposit method
-    //do we check sender has enough to deposit?
-    ///should I call and ERC 20 method?
-      function deposit(
-        uint amount,
-        bytes32 ticker)
-        external {
-            if (ticker == tokenPT){
-                walletP[msg.sender] += amount;
-                amountTokenP += amount;
-            } else if (ticker == token1T){
-                wallet1[msg.sender] += amount;
-                amountToken1 += amount;
-            }
-            
-          updateOrders(amount);
-            
+
+    // todo: fill in the initialize method, which should simply set the parameters of the contract correctly. To be called once
+    // upon deployment by the factory.
+    function initialize(address _token0, address _token1, address _dex, uint whichP, bytes32 _tickerQ, bytes32 _tickerT)
+    external {
+        tokenPT = _tickerQ;
+        token1T = _tickerT;
+        dex = _dex;
+        if (whichP == 1) {
+           tokenP = _token0;
+           token1 = _token1;
+        } else {
+            tokenP = _token1;
+            token1 = _token0;
+        }
     }
     
-    ///withdraw method
-    // todo: implement withdraw, which should do the opposite of deposit. The trader should not be able to withdraw more than
-    // they have in the exchange.
-    function withdraw(
-        uint amount,
-        bytes32 ticker)
-        external {
-            if (ticker == tokenPT){
-                if (walletP[msg.sender] >= amount){
-                    walletP[msg.sender] += amount;
-                    amountTokenP -= amount;
-                }
-            } else if (ticker == token1T){
-                if (wallet1[msg.sender] >= amount){
-                    wallet1[msg.sender] += amount;
-                    amountToken1 -= amount;
-                }
+    // todo: implement wallet functionality and trading functionality
+
+    // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
+    // both tokens at the same time
+    function deposit(uint tokenAmount, uint pineAmount) external {
+         if (walletP[msg.sender] >= pineAmount && pineAmount != 0){  //
+        
+        IExc(dex).withdraw(pineAmount, "PIN"); //does this recognize PIN?
+        walletP[msg.sender] += pineAmount;
+        amountTokenP += pineAmount;
+        //do we update wallet in exchange?
+        
+        }
+        
+    if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
+        //should we use transfer here?
+            wallet1[msg.sender] += tokenAmount;
+            amountToken1 += tokenAmount;
             }
-            
-            updateOrders(amount);
+            updateOrders(amountToken1);
+    }
+
+    function withdraw(uint tokenAmount, uint pineAmount) external {
+    if (walletP[msg.sender] >= pineAmount && pineAmount != 0){
+        walletP[msg.sender] -= pineAmount;
+        amountTokenP -= pineAmount;
+        }
+    if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
+            wallet1[msg.sender] -= tokenAmount;
+            amountToken1 -= tokenAmount;
+            }
+        
+            updateOrders(amountToken1);
     }
     
-    ///calculate price method
-    
-    function newPrice() private returns (uint) {
+     function newPrice() private returns (uint) {
         uint new_price = SafeMath.div(amountTokenP, amountToken1);
         price = new_price;
     }
@@ -106,39 +109,6 @@ contract Pool {
                 IExc.Side.SELL);
         
     }
-    
-    ///make and send limit order?
-    
-
-    // todo: fill in the initialize method, which should simply set the parameters of the contract correctly. To be called once
-    // upon deployment by the factory.
-    function initialize(address _token0, address _token1, address _dex, uint whichP, bytes32 _tickerQ, bytes32 _tickerT)
-    external {
-        
-        
-        tokenPT = _tickerQ;
-        token1T = _tickerT;
-        dex = _dex;
-        if (whichP == 1) {
-           tokenP = _token0;
-           token1 = _token1;
-        } else {
-            tokenP = _token1;
-            token1 = _token0;
-        }
-    }
-    
-    // Just like the checks for the quote token in factory, your check to ensure that initialize is 
-    // actually deployed by the factory can be super simple, because we don’t actually know where 
-    // factory is deployed, unlike the mainnet!
-    
-    //do same checks as Factory? or check that initialize from Factory? and how so?
-    
-    //what is dex?
-    
-    
-    
-    // todo: implement wallet functionality and trading functionality
 
     function testing(uint testMe) public view returns (uint) {
         if (testMe == 1) {

@@ -6,6 +6,24 @@
 	"output": {
 		"abi": [
 			{
+				"constant": false,
+				"inputs": [
+					{
+						"name": "tokenAmount",
+						"type": "uint256"
+					},
+					{
+						"name": "pineAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "withdraw",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"constant": true,
 				"inputs": [
 					{
@@ -62,30 +80,12 @@
 				"constant": false,
 				"inputs": [
 					{
-						"name": "amount",
+						"name": "tokenAmount",
 						"type": "uint256"
 					},
 					{
-						"name": "ticker",
-						"type": "bytes32"
-					}
-				],
-				"name": "withdraw",
-				"outputs": [],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"constant": false,
-				"inputs": [
-					{
-						"name": "amount",
+						"name": "pineAmount",
 						"type": "uint256"
-					},
-					{
-						"name": "ticker",
-						"type": "bytes32"
 					}
 				],
 				"name": "deposit",
@@ -99,17 +99,7 @@
 			"methods": {}
 		},
 		"userdoc": {
-			"methods": {
-				"deposit(uint256,bytes32)": {
-					"notice": "should I call and ERC 20 method?"
-				},
-				"initialize(address,address,address,uint256,bytes32,bytes32)": {
-					"notice": "make and send limit order?"
-				},
-				"withdraw(uint256,bytes32)": {
-					"notice": "withdraw method"
-				}
-			}
+			"methods": {}
 		}
 	},
 	"settings": {
@@ -126,9 +116,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0xb03600bef66a0263fdd8c22d84a8c3ae8dba0fe7c16d724d735dd3aecc0c08f8",
+			"keccak256": "0xa569648cb7b2e45035d4cd6cd18d5d30b8efeb938bdb5ad85f9deb775d9b1ab2",
 			"urls": [
-				"bzzr://754764f64ec66a62bd174b1cd592870cbe0375d5d02736b4439a2ed1599c5508"
+				"bzzr://379c021cbe50482384fecfb3a12f98a9c47caf54df9ac6f231d30991102f82cd"
 			]
 		},
 		"contracts/Heap.sol": {
@@ -138,15 +128,15 @@
 			]
 		},
 		"contracts/IExc.sol": {
-			"keccak256": "0xe9b10cb9900cbc02048dc2c5ac301a07c5763310fe50a1e990fc37657284cdf3",
+			"keccak256": "0xf7d6d0bde859ffb3fadae33eec475bc70076152199cafaef15c08f5569dfde82",
 			"urls": [
-				"bzzr://d81872d6eda7eee68651de9e81a1b628591948fae1cd4f670c015790c83031c3"
+				"bzzr://848b90305a48580b0b5b820b513cd45eaf37033a513d3d94492c3417ad733ff6"
 			]
 		},
 		"contracts/Pool.sol": {
-			"keccak256": "0x562d30747f9829b3143da51a58a9e82c1f8476e935b2cffaf4c25c1833770910",
+			"keccak256": "0x738ca7a7a615f42d571b68d6b51c4f2c07f56f75f2d86cf2e5707a361ff69e98",
 			"urls": [
-				"bzzr://dc007849a5bb347d105aa55f8fe242e73640a4d986af66b6b4a43920f93c843c"
+				"bzzr://be6192542e5ac2d578dad4a786f4356e15d44363243328763ad35cf9b6524583"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {
