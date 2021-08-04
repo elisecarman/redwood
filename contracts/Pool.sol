@@ -22,6 +22,9 @@ contract Pool {
     mapping(address => uint) walletP;
     mapping(address => uint) wallet1;
     
+    //mapping of locked tokens <-- can't   <-- maybe a relic
+    //might lock pine too, dunno
+    
 
     // todo: fill in the initialize method, which should simply set the parameters of the contract correctly. To be called once
     // upon deployment by the factory.
@@ -49,16 +52,18 @@ contract Pool {
         //transfer from
         //1) transferFrom msg.sender to current contract
       
-    if (IERC20(tokenP).transferFrom(msg.sender, dex, pineAmount)){
+    if (IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount)){
         //walletP[msg.sender] += pineAmount;
-        //amountTokenP += pineAmount; 
+        //amountTokenP += pineAmount;
+        
         walletP[msg.sender] = SafeMath.add(walletP[msg.sender], pineAmount);
         amountTokenP = SafeMath.add(amountTokenP, pineAmount);
     }
     
-    if (IERC20(token1).transferFrom(msg.sender, dex, tokenAmount)){
+    if (IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount)){  //switched out dex
         //wallet1[msg.sender] += tokenAmount;
         //amountToken1 += tokenAmount; //use SafeMath
+        
         wallet1[msg.sender] = SafeMath.add(wallet1[msg.sender], tokenAmount);
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         

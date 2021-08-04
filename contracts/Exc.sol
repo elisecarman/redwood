@@ -216,8 +216,8 @@ contract Exc is IExc{
              if (side == IExc.Side.BUY){
                  
                  require(contains_token[ticker]);
-                 require(traderBalances[msg.sender]["PIN"] >= amount);
-                 require(ticker != "PIN");
+                 require(traderBalances[msg.sender][PIN] >= amount);
+                 require(ticker != PIN);
                  
                  uint id = allSellBooks[ticker].getMax().id;
                  uint new_amount = amount;
