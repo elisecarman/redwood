@@ -444,6 +444,29 @@
 				"type": "function"
 			},
 			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "return_token",
+				"outputs": [
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					},
+					{
+						"name": "tokenAddress",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -500,7 +523,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"redwood/contracts/Exc.sol": "Exc"
+			"contracts/Exc.sol": "Exc"
 		},
 		"evmVersion": "byzantium",
 		"libraries": {},
@@ -511,43 +534,43 @@
 		"remappings": []
 	},
 	"sources": {
-		"redwood/contracts/Exc.sol": {
-			"keccak256": "0xc2b2a973cf6056238a9e58f828cb82117e4e167b76b8b2b3333ec18507128aac",
+		"contracts/Exc.sol": {
+			"keccak256": "0xfb62b31b40820499e917ef750ff2a167dfd9fffc5fcae46c494a76f19c79bdaf",
 			"urls": [
-				"bzzr://d2ec36a55ff999288049a05628ed9c70db9a71db0129f2913628967e27aa1d39"
+				"bzzr://8e80c8f7b4a97d144bcb36cf8b7113d687e6904bdd704d3856d27e31feb27625"
 			]
 		},
-		"redwood/contracts/Heap.sol": {
+		"contracts/Heap.sol": {
 			"keccak256": "0x44aabeb27f7ae52e44809dabe4ad067a801b2730f5e41368fc6b949b7fe62743",
 			"urls": [
 				"bzzr://bfe951ea38765281e85f9e4b8d6a8fd8ba504ca81f8458937a749fb9792e3cd4"
 			]
 		},
-		"redwood/contracts/IExc.sol": {
+		"contracts/IExc.sol": {
 			"keccak256": "0xf7d6d0bde859ffb3fadae33eec475bc70076152199cafaef15c08f5569dfde82",
 			"urls": [
 				"bzzr://848b90305a48580b0b5b820b513cd45eaf37033a513d3d94492c3417ad733ff6"
 			]
 		},
-		"redwood/contracts/libraries/GSN/Context.sol": {
+		"contracts/libraries/GSN/Context.sol": {
 			"keccak256": "0x98d9c3f119eabc9384b14d85702d9a1249760fc32ae8cb295f1071a064c6733a",
 			"urls": [
 				"bzzr://beced7f16902f6de97148603c79e526e72d5244a56fb76d500ee3b857ff9bb47"
 			]
 		},
-		"redwood/contracts/libraries/math/SafeMath.sol": {
+		"contracts/libraries/math/SafeMath.sol": {
 			"keccak256": "0xeb295b448107f6adee6c0861eba7cd58983eeb1a2bf9cd24b3df9c75fe17db75",
 			"urls": [
 				"bzzr://cdb2eefb0ce6e610ee1b981cdaed5906eaeff5363d4cc6f3df854c93148c3916"
 			]
 		},
-		"redwood/contracts/libraries/token/ERC20/ERC20.sol": {
+		"contracts/libraries/token/ERC20/ERC20.sol": {
 			"keccak256": "0x5394db3bea189ac8c117f957e21f2b4369e7987ba8520613a5c62e56ba751d58",
 			"urls": [
 				"bzzr://0d796e6f2827d5f4250e338ce5fdf732941f542fd8ea4fac2a880590eb260796"
 			]
 		},
-		"redwood/contracts/libraries/token/ERC20/IERC20.sol": {
+		"contracts/libraries/token/ERC20/IERC20.sol": {
 			"keccak256": "0xd45135fede71fe4b2f06ccc22c459f880912785065a13f5ebf85ebe3d07d632e",
 			"urls": [
 				"bzzr://f039f90386b495b4615922fc5eb29b8659ab0eff8fc1895624b4e5b77ceee009"
