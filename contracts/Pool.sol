@@ -18,12 +18,12 @@ contract Pool {
     uint private price;
     uint private idSell;
     uint private idBuy;
+    
     // todo: create wallet data structures
     mapping(address => uint) walletP;
     mapping(address => uint) wallet1;
     
-    //mapping of locked tokens <-- can't   <-- maybe a relic
-    //might lock pine too, dunno
+   
     
 
     // todo: fill in the initialize method, which should simply set the parameters of the contract correctly. To be called once
@@ -47,23 +47,16 @@ contract Pool {
     // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
     // both tokens at the same time
     function deposit(uint tokenAmount, uint pineAmount) external {
-       ///what if we have the correct tokenAmount but not correct pineAmount? Vice Versa?
-        
-        //transfer from
-        //1) transferFrom msg.sender to current contract
+    
       
     if (IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount)){
-        //walletP[msg.sender] += pineAmount;
-        //amountTokenP += pineAmount;
-        
+       
         walletP[msg.sender] = SafeMath.add(walletP[msg.sender], pineAmount);
         amountTokenP = SafeMath.add(amountTokenP, pineAmount);
     }
     
     if (IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount)){  //switched out dex
-        //wallet1[msg.sender] += tokenAmount;
-        //amountToken1 += tokenAmount; //use SafeMath
-        
+       
         wallet1[msg.sender] = SafeMath.add(wallet1[msg.sender], tokenAmount);
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
@@ -76,8 +69,7 @@ contract Pool {
         
     if (walletP[msg.sender] >= pineAmount && pineAmount != 0){
         walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
-     //   walletP[msg.sender] -= pineAmount;
-    //    amountTokenP -= pineAmount;
+        
         amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
         
         IERC20(tokenP).transfer(msg.sender, pineAmount);
@@ -85,10 +77,7 @@ contract Pool {
         }
     if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
             wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
-           // wallet1[msg.sender] -= tokenAmount;
-            
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
-          //  amountToken1 -= tokenAmount;
             IERC20(token1).transfer(msg.sender, tokenAmount);
             }
         
