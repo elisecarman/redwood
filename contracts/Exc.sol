@@ -22,9 +22,11 @@ contract Exc is IExc{
     /// of the traders, and the IDs of the next trades and orders. Reference the NewTrade event and the IExc
     /// interface for more details about orders and sides.
     
-    mapping(bytes32 => Heap.Data) public allSellBooks;
-
-    mapping(bytes32 => Heap.Data) public allBuyBooks;
+   // mapping(bytes32 => Heap.Data) public allSellBooks;
+//    mapping(bytes32 => Heap.Data) public allBuyBooks;
+    
+    mapping(bytes32 => Order[]) public allSellBooks2;
+    mapping(bytes32 => Order[]) public allBuyBooks2;
     
     mapping(bytes32 => Token) public tokens;
     bytes32[] public tokenList;
@@ -39,12 +41,12 @@ contract Exc is IExc{
     
     uint public id_ticker;
     uint public trade_ticker;
-    uint public market_order_ticker;
+   // uint public market_order_ticker;
     
     
-    mapping(uint => Order) public orders;
-    uint[] public allOrders;
-     
+ //   mapping(uint => Order) public orders;
+    //uint[] public allOrders;
+    // Order[] public allOrders;
     
     /// @notice an event representing all the needed info regarding a new trade on the exchange
     event NewTrade(
@@ -62,21 +64,31 @@ contract Exc is IExc{
     function getOrders(
       bytes32 ticker, 
       Side side) 
-      external 
-      view
+     external
+     view
       returns(Order[] memory) {
-        uint i;
-        uint j;
-        Order[] memory order_list = new Order[](allOrders.length);
+        // uint i;
+        // uint j;
+        //der[] memory order_list = new Order[](allOrders.length);
         
-        for (i = 0; i < allOrders.length; i++) {  
-        if (allOrders[i] != 0){
-            order_list[j] = orders[allOrders[i]];
-            j++;
-        }
-        i++;
-        }
+        // for (i = 0; i < allOrders.length; i++) {  
+        // if (allOrders[i] != 0){
+        //     order_list[j] = orders[allOrders[i]];
+        //     j++;
+        // }
+        // i++;
+        // }
+       if (side == IExc.Side.BUY){
+           return allBuyBooks2[ticker];
+       } else if  (side == IExc.Side.BUY){
+           return allSellBooks2[ticker];
+       }
+        
+   
+         //return allOrders;
     }
+    
+  
 
     // todo: implement getTokens, which simply returns an array of the tokens currently traded on in the exchange
     function getTokens() 
@@ -89,6 +101,7 @@ contract Exc is IExc{
          tok_list[i]= tokens[tokenList[i]];
           }
           return tok_list;
+       
     }
     
     // todo: implement addToken, which should add the token desired to the exchange by interacting with tokenList and tokens
@@ -152,19 +165,93 @@ contract Exc is IExc{
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
         id_ticker ++;
-        uint i;
+        //uint i;
         
-        if (side == IExc.Side.SELL){
-            ///negative input price for a Min priority heap
-       allSellBooks[ticker].insert(-(price), id_ticker);
-       
-        } else if (side == IExc.Side.BUY){
-        allBuyBooks[ticker].insert(price, order_id);
+        
+        insert(newOrder, side, ticker);
+        
+        //this might not be necessary anymore.
+       // orders[order_id] = newOrder; 
+       // allOrders.length++;
+        //allOrders[newOrder.id]= newOrder.id;
+    }
+    
+    function insert(Order memory order, Side side, bytes32 ticker) internal{
+        if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
+            //allSellBooks2.length++;
+            uint i;
+            Order memory swap_item = order;
+            
+           for (i = 0; i < allSellBooks2[ticker].length; i++) { 
+             if (swap_item.price < allSellBooks2[ticker][i].price){
+                Order memory holder = allSellBooks2[ticker][i];
+                allSellBooks2[ticker][i] = swap_item;
+                swap_item = holder;
+           }
+           //see if last element gets included-- depends oif the length was updated
+           //or just don't update, push last item
         }
+        allSellBooks2[ticker].push(swap_item);
+            
+        } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
         
-        orders[order_id] = newOrder; 
-        allOrders.length++;
-        allOrders[newOrder.id]= newOrder.id;
+            uint i;
+            Order memory swap_item = order;
+            
+           for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
+             if (swap_item.price > allBuyBooks2[ticker][i].price){
+                Order memory holder = allBuyBooks2[ticker][i];
+                allBuyBooks2[ticker][i] = swap_item;
+                swap_item = holder;
+           }
+           //see if last element gets included-- depends oif the length was updated
+           //or just don't update, push last item
+        }
+        allSellBooks2[ticker].push(swap_item); 
+        }
+    }
+    
+    
+    function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
+         if (side == IExc.Side.SELL){
+             uint i;
+             uint swap_item = id;
+             
+             for (i = 0; i < allSellBooks2[ticker].length; i++) {
+                 
+             if (allSellBooks2[ticker][i].id == swap_item){
+                 if (i == allSellBooks2[ticker].length - 1){
+               delete allSellBooks2[ticker][i];
+               allSellBooks2[ticker].length--;
+               return true;
+                 }
+                 swap_item = allSellBooks2[ticker][i+1].id;
+                 Order memory holder = allSellBooks2[ticker][i+1];
+                allSellBooks2[ticker][i] = holder;
+             }
+                 
+             }
+             return false;
+             
+         } else if (side == IExc.Side.BUY){
+            uint i;
+             uint swap_item = id;
+             for (i = 0; i < allBuyBooks2[ticker].length; i++) {
+                 
+             if (allSellBooks2[ticker][i].id == swap_item){
+                 if (i == allBuyBooks2[ticker].length - 1){
+               delete allBuyBooks2[ticker][i];
+               allBuyBooks2[ticker].length--;
+               return true;
+                 }
+                 swap_item = allBuyBooks2[ticker][i+1].id;
+                 Order memory holder = allBuyBooks2[ticker][i+1];
+                allBuyBooks2[ticker][i] = holder;
+             }
+                 
+             }
+             return false;
+         }
     }
     
     // todo: implement deleteLimitOrder, which will delete a limit order from the orderBook as long as the same trader is deleting
@@ -173,32 +260,61 @@ contract Exc is IExc{
         uint id,
         bytes32 ticker,
         Side side) external returns (bool) {
-            require(contains_token[ticker] && ticker != PIN);
-            
-            Order memory o = orders[id];
-            if (msg.sender == o.trader){
-                Heap.Node memory removed;
-             if (o.side == IExc.Side.BUY){
-                 //if cancel buy order, get refunded Pine?
-                removed = allBuyBooks[ticker].extractById(id);
-             }
-            else if (o.side == IExc.Side.SELL){
-                //if cancel sell order, get refunded TOken 1
-                //orders[id] = 0;
-                removed = allSellBooks[ticker].extractById(id);
-                ///delete from order book
-                }
-                
-            if (removed.id == 0 && removed.priority == 0){
+            if (!contains_token[ticker] || ticker == PIN){
                 return false;
             }
             
-            delete(orders[id]);
-            allOrders[id] = 0;
-            return true;
+            // Order memory o = orders[id];
+            // if (msg.sender == o.trader){
+            //     Heap.Node memory removed;
+            //  if (o.side == IExc.Side.BUY){
+            //      //if cancel buy order, get refunded Pine?
+            //     removed = allBuyBooks[ticker].extractById(id);
+            //  }
+            // else if (o.side == IExc.Side.SELL){
+            //     //if cancel sell order, get refunded TOken 1
+            //     //orders[id] = 0;
+            //     removed = allSellBooks[ticker].extractById(id);
+            //     ///delete from order book
+            //     }
+                
+            // if (removed.id == 0 && removed.priority == 0){
+            //     return false;
+            // }
             
-            }
-            return false;
+            
+            bool  deleted = delete_element(id, side, ticker);
+            return deleted;
+            //delete(orders[id]);
+            //allOrders[id] = 0;
+            
+    }
+    
+    function remove_max(Side side, bytes32 ticker) internal{
+        if (side == IExc.Side.SELL){
+        Order memory swap_item = allSellBooks2[ticker][1];
+        uint i;
+        for (i = 0; i < allSellBooks2[ticker].length; i++) {
+            if (i == (allSellBooks2[ticker].length -1)){
+                delete allSellBooks2[ticker][i];
+                allSellBooks2[ticker].length--; 
+                }
+         allSellBooks2[ticker][i] = swap_item;
+         swap_item = allSellBooks2[ticker][i + 1];
+        }
+        
+    } else if (side == IExc.Side.BUY){
+        Order memory swap_item = allBuyBooks2[ticker][1];
+        uint i;
+        for (i = 0; i < allBuyBooks2[ticker].length; i++) {
+            if (i == (allBuyBooks2[ticker].length -1)){
+                delete allBuyBooks2[ticker][i];
+                allBuyBooks2[ticker].length--; 
+                }
+         allBuyBooks2[ticker][i] = swap_item;
+         swap_item = allBuyBooks2[ticker][i + 1];
+        }
+    }
     }
     
     // todo: implement makeMarketOrder, which will execute a market order on the current orderbook. The market order need not be
@@ -219,45 +335,50 @@ contract Exc is IExc{
                  require(traderBalances[msg.sender][PIN] >= amount);
                  require(ticker != PIN);
                  
-                 uint id = allSellBooks[ticker].getMax().id;
+                 //uint id = allSellBooks[ticker].getMax().id;
+                 Order memory max_order = allSellBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((orders[id].amount - orders[id].filled) <= new_amount){
-                  Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
-                  uint new_amount = amount - (orders[id].amount - orders[id].filled);
+                  while ((max_order.amount - max_order.filled) <= new_amount){
+                  //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
+                  remove_max(IExc.Side.SELL, ticker);
+                  uint new_amount = amount - (max_order.amount - max_order.filled);
                   
                   emit NewTrade(trade_ticker, 
-                            id,
-                            orders[id].ticker,
-                            orders[id].trader,
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
                             msg.sender,
-                            orders[id].amount - orders[id].filled,
-                            orders[id].price,
+                            max_order.amount - max_order.filled,
+                            max_order.price,
                             now);
                             
                 //update balances- Buyer
                 traderBalances[msg.sender][ticker] += new_amount;
-                traderBalances[msg.sender][PIN] -= new_amount;
+                traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
                 
                 //update balances- Seller
-                traderBalances[orders[id].trader][ticker] -= new_amount;
-                traderBalances[orders[id].trader][PIN] += new_amount;
+                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
                 
                    //update information     
                   trade_ticker++;          
-                  delete(orders[id]); 
-                  allOrders[id]= 0;
-                  id = allSellBooks[ticker].getMax().id;
+                 // delete(orders[id]); 
+                 // allOrders[id]= 0;
+                 
+                 max_order = allSellBooks2[ticker][0];
+                 // id = allSellBooks[ticker].getMax().id;
                   }
-                  orders[id].filled += new_amount;
+                  
+                  max_order.filled += new_amount;
                   
                   emit NewTrade(trade_ticker, 
-                            id,
+                            max_order.id,
                             ticker,
-                            orders[id].trader,
+                            max_order.trader,
                             msg.sender,
                             new_amount,
-                            orders[id].price,
+                            max_order.price,
                             now);
                             
                 trade_ticker++;    
@@ -265,53 +386,54 @@ contract Exc is IExc{
                  
               //record event
              } else if (side == IExc.Side.SELL){
-               uint id = allBuyBooks[ticker].getMax().id;
+                Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((orders[id].amount - orders[id].filled) <= new_amount){
-                  Heap.Node memory removedMax = allBuyBooks[ticker].extractMax();
-                  new_amount = amount - (orders[id].amount - orders[id].filled);
+                  while ((max_order.amount - max_order.filled) <= new_amount){
+                  //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
+                  remove_max(IExc.Side.BUY, ticker);
+                  uint new_amount = amount - (max_order.amount - max_order.filled);
                   
-                   emit NewTrade(trade_ticker, 
-                            id,
-                            orders[id].ticker,
-                            orders[id].trader,
-                            msg.sender,
-                            orders[id].amount - orders[id].filled,
-                            orders[id].price,
-                            now);
-                  trade_ticker++; 
-                  
-                  //update balances- Seller
-                traderBalances[msg.sender][ticker] -= new_amount;
-                traderBalances[msg.sender][PIN] += new_amount;
-                
-                //update balances- Buyer
-                traderBalances[orders[id].trader][ticker] += new_amount;
-                traderBalances[orders[id].trader][PIN] -= new_amount;
-                 
-                 //update information 
-                  delete(orders[id]);
-                  allOrders[id] = 0;
-                  id = allBuyBooks[ticker].getMax().id;
-                  
-                  
-                  }
-                  orders[id].filled += new_amount;
-                  
-                  ///should I emit trade for market order itself or is that repetitive
-                   emit NewTrade(trade_ticker, 
-                            id,
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
                             ticker,
-                            orders[id].trader,
+                            max_order.trader,
                             msg.sender,
-                            new_amount,
-                            orders[id].price,
+                            max_order.amount - max_order.filled,
+                            max_order.price,
                             now);
                             
-                trade_ticker++; 
-             }   
+                //update balances- Buyer
+                traderBalances[msg.sender][ticker] += new_amount;
+                traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                
+                   //update information     
+                  trade_ticker++;          
+                 // delete(orders[id]); 
+                 // allOrders[id]= 0;
+                 
+                 max_order = allBuyBooks2[ticker][0];
+                 // id = allSellBooks[ticker].getMax().id;
+                  }
+                  
+                  max_order.filled += new_amount;
+                  
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
+                            msg.sender,
+                            new_amount,
+                            max_order.price,
+                            now);
+                            
+                trade_ticker++;    
     }
+}
     
     //todo: add modifiers for methods as detailed in handout
     
