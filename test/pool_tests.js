@@ -10,7 +10,7 @@ const SIDE = {
 };
 
 contract('Pool', (accounts) => {
-    let pin, zrx, exc;
+    let pin, zrx, exc, pool;
     const [trader1, trader2] = [accounts[1], accounts[2]];
     const [PIN, ZRX] = ['PIN', 'ZRX']
         .map(ticker => web3.utils.fromAscii(ticker));
@@ -22,6 +22,17 @@ contract('Pool', (accounts) => {
         ]));
         exc = await Exc.new();
         fac = await Fac.new();
+        let event = await fac.createPair(
+                        pin.address,
+                        zrx.address,
+                        pin.address,
+                        exc.address,
+                        PIN,
+                        ZRX
+                    );
+        let log = event.logs[0];
+        let poolAd = log.args.pair;
+        const pool = await Pool.at(poolAd);
        // pool = await Pool.new();
     });
 
@@ -29,17 +40,8 @@ contract('Pool', (accounts) => {
     await pin.mint(trader1, 1000);
     await pin.approve(pool.address,10, {from: trader1});
     //await exc.addToken (PIN, pin.address);
-    let event = await fac.createPair(
-                pin.address,
-                zrx.address,
-                pin.address,
-                exc.address,
-                PIN,
-                ZRX
-            );
-            let log = event.logs[0];
-            let poolAd = log.args.pair;
-            const pool = await Pool.at(poolAd);
+
+
             const checkMe = await pool.testing(1);
             assert(checkMe, 5);
 

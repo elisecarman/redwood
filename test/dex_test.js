@@ -42,17 +42,31 @@ await exc.withdraw(5, PIN, {from: trader1});
 assert.equal(await exc.traderBalances(trader1, PIN), 5 , "withdraw executed");
 });
 
-it('should create one limit order', async () => {
-await zrx.mint(trader1, 1000);
-await zrx.approve(exc.address,10, {from: trader1});
-await exc.addToken (ZRX, zrx.address);
-await exc.deposit(10, ZRX, {from: trader1});
+//it('should create one limit order', async () => {
+//await zrx.mint(trader1, 1000);
+//await zrx.approve(exc.address,10, {from: trader1});
+//await exc.addToken (ZRX, zrx.address);
+//await exc.deposit(10, ZRX, {from: trader1});
+//
+//await exc.makeLimitOrder(ZRX, 10, 1, SIDE.BUY, {from: trader1});
+//const orders = await exc.AllBuyBooks2[ZRX].length;
+//assert.equal(orders, 10, 'deposit executed');
+//
+//
+//});
 
-await exc.makeLimitOrder(ZRX, 10, 1, SIDE.BUY, {from: trader1});
-const orders = await exc.AllBuyBooks2[ZRX].length;
-assert.equal(orders, 10, 'deposit executed');
-
-
-});
+//it('test addToken', async () => {
+//await zrx.mint(trader1, 1000);
+//await zrx.approve(exc.address,10, {from: trader1});
+//await exc.addToken (ZRX, zrx.address);
+//
+//const token_count =
+//
+//await exc.makeLimitOrder(ZRX, 10, 1, SIDE.BUY, {from: trader1});
+//const orders = await exc.AllBuyBooks2[ZRX].length;
+//assert.equal(orders, 10, 'deposit executed');
+//
+//
+//});
 
 });

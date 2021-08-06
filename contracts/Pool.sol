@@ -72,8 +72,13 @@ contract Pool {
         
     if (walletP[msg.sender] >= pineAmount && pineAmount != 0 && wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
         walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
-                IERC20(tokenP).transfer(msg.sender, pineAmount);
-                IERC20(token1).transfer(msg.sender, tokenAmount);
+        
+        if (IERC20(tokenP).approve(msg.sender, pineAmount)){
+                IERC20(tokenP).transfer(msg.sender, pineAmount);}
+    
+        if (IERC20(token1).approve(msg.sender, tokenAmount)){
+                IERC20(token1).transfer(msg.sender, tokenAmount);}
+                
         amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
         wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
