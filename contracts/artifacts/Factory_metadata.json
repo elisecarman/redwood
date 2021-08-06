@@ -135,15 +135,15 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x0851618d5b05e6476f756ac7152e7e48f6a0894a0014f4933afccfe8d557933d",
+			"keccak256": "0x5361359a7e4a95a08f1af58656fdc0d2ae91202a5205e1cc3072f13e3d8ea404",
 			"urls": [
-				"bzzr://8576cadbd29ea524bde2e23b30d3e5af020443b7feb228eeb540f4034b40cd27"
+				"bzzr://f01d2091273b91fba5e15b79167ba6927d5498e4849a8d239bb0ade248e11c00"
 			]
 		},
 		"contracts/Factory.sol": {
-			"keccak256": "0xf4af7a363382f6731870954f8b4e6acdf76e9026609f3b48147bfb20f8be7dca",
+			"keccak256": "0xc7506e55e582646bd232bcf37f3971a4615161f70edf534f66bdd1e113db59ee",
 			"urls": [
-				"bzzr://8807874afb0982298bd8b6ea8dd49b132d81f780c8bf0615bef51bde2f0c6cc9"
+				"bzzr://4a3ecb687660074291f12d146b9366276a5d018c5251ad23e70eed5abacdc48e"
 			]
 		},
 		"contracts/Heap.sol": {
@@ -159,9 +159,9 @@
 			]
 		},
 		"contracts/Pool.sol": {
-			"keccak256": "0xb8b03e9cc248719b89d3780ff94e700a403bd49626b5e21df6957cd2f206bc48",
+			"keccak256": "0xc449ae672caf99c7c111cae89f272e415da46cc930d2699e029835592951c7db",
 			"urls": [
-				"bzzr://b0472a8105fd427f53734dd1126a52d61984fd722ee0c6ffa5542a03b57f2649"
+				"bzzr://97bcb1427d6a2b5837f87e8f43ff6c015340552d143957191e0445a186ea9702"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {

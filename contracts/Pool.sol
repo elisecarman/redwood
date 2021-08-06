@@ -46,43 +46,45 @@ contract Pool {
 
     // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
     // both tokens at the same time
-    function deposit(uint tokenAmount, uint pineAmount) external {
+    function deposit(uint tokenAmount, uint pineAmount) 
+    payable
+    external {
     
       
-    if (IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount)){
+   /// if (IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount) &&
+   /// IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount)){
        
         walletP[msg.sender] = SafeMath.add(walletP[msg.sender], pineAmount);
         amountTokenP = SafeMath.add(amountTokenP, pineAmount);
-    }
-    
-    if (IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount)){  //switched out dex
        
         wallet1[msg.sender] = SafeMath.add(wallet1[msg.sender], tokenAmount);
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
-    }
-        updateOrders(amountToken1);
+         updateOrders(amountToken1);
+   /// }
+       
 
    }
 
-    function withdraw(uint tokenAmount, uint pineAmount) external {
+    function withdraw(uint tokenAmount, uint pineAmount) 
+    payable
+    external {
         
-    if (walletP[msg.sender] >= pineAmount && pineAmount != 0){
+    if (walletP[msg.sender] >= pineAmount && pineAmount != 0 && wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
         walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
-        
+                IERC20(tokenP).transfer(msg.sender, pineAmount);
+                IERC20(token1).transfer(msg.sender, tokenAmount);
         amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
-        
-        IERC20(tokenP).transfer(msg.sender, pineAmount);
-        
-        }
-    if (wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
-            wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
+        wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
-            IERC20(token1).transfer(msg.sender, tokenAmount);
+            
+            
+        updateOrders(amountToken1);
             }
         
-            updateOrders(amountToken1);
+            
     }
+    
     
      function newPrice() private returns (uint) {
         uint new_price = SafeMath.div(amountTokenP, amountToken1);
@@ -127,4 +129,6 @@ contract Pool {
             return 3;
         }
     }
+    
+
 }

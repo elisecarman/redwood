@@ -444,29 +444,6 @@
 				"type": "function"
 			},
 			{
-				"constant": true,
-				"inputs": [
-					{
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "return_token",
-				"outputs": [
-					{
-						"name": "ticker",
-						"type": "bytes32"
-					},
-					{
-						"name": "tokenAddress",
-						"type": "address"
-					}
-				],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -535,9 +512,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0xe1ecc0b0f8e171eed6e8de6599f9e446e7f3bd0bfd95b238956c1347f4431c95",
+			"keccak256": "0x5361359a7e4a95a08f1af58656fdc0d2ae91202a5205e1cc3072f13e3d8ea404",
 			"urls": [
-				"bzzr://f507040aac9166e71fb8e72a4e7ae4f6d4db70a8c7873a55034d59e4a99c1629"
+				"bzzr://f01d2091273b91fba5e15b79167ba6927d5498e4849a8d239bb0ade248e11c00"
 			]
 		},
 		"contracts/Heap.sol": {

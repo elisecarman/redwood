@@ -14,7 +14,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/Heap.sol": "Heap"
+			"redwood/contracts/Heap.sol": "Heap"
 		},
 		"evmVersion": "byzantium",
 		"libraries": {},
@@ -25,7 +25,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/Heap.sol": {
+		"redwood/contracts/Heap.sol": {
 			"keccak256": "0x44aabeb27f7ae52e44809dabe4ad067a801b2730f5e41368fc6b949b7fe62743",
 			"urls": [
 				"bzzr://bfe951ea38765281e85f9e4b8d6a8fd8ba504ca81f8458937a749fb9792e3cd4"
