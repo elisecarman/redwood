@@ -86,28 +86,14 @@ console.log(order2);
 console.log(order3);
 console.log(order4);
 
-//        id,
-//        trader,
-//        side,
-//        ticker,
-//        amount,
-//        filled,
-//        price,
-//        date);
-
-
-await exc.insert(order1, 0, ZRX);//SIDE.BUY
+await exc.insert(order1, SIDE.BUY , ZRX);//SIDE.BUY
 
 const buy_book = await exc.getOrders(ZRX, SIDE.BUY);
-//console.log(buy_book.length);
-//console.log(tokenList);
+
 const order_book = buy_book[0];
 assert.equal(order_book.id, order1.id, 'order added');
 
 
-//
-//let orders = await exc.getOrders(ZRX, SIDE.BUY, {from: trader1 });
-//console.log(orders)
 
 });
 

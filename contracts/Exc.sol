@@ -163,12 +163,9 @@ contract Exc is IExc{
          }
          
        
-            
-           
-            
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
-        id_ticker ++;
+        id_ticker = SafeMath.add(id_ticker, 1);
         
         insert(newOrder, side, ticker);
         
@@ -213,49 +210,142 @@ contract Exc is IExc{
         return order;
     }
     
-    function insert(Order memory order, Side side, bytes32 ticker) public{
-        if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
-            //allSellBooks2.length++;
+    // function insert2(Order memory order, Side side, bytes32 ticker) public{
+    //     if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
+    //         //allSellBooks2.length++;
+    //         uint i;
+    //         Order memory swap_item = order;
+    //         if (allSellBooks2[ticker].length == 0){
+    //             allSellBooks2[ticker].push(order);
+    //         } else {
+            
+    //       for (i = 0; i < allSellBooks2[ticker].length; i++) { 
+    //          if (swap_item.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+    //             Order memory holder = allSellBooks2[ticker][i];
+    //             allSellBooks2[ticker][i] = swap_item;
+    //             swap_item = holder;
+    //       }
+    //     }
+    //     allSellBooks2[ticker].push(swap_item);
+    //     }
+            
+    //     } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
+        
+    //         uint i;
+    //         Order memory swap_item = order;
+            
+    //         if (allBuyBooks2[ticker].length == 0){
+    //             allBuyBooks2[ticker].push(order);
+    //         }
+            
+    //       for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
+    //          if (swap_item.price <= allBuyBooks2[ticker][i].price){  ///old sign >
+    //             Order memory holder = allBuyBooks2[ticker][i];
+    //             allBuyBooks2[ticker][i] = swap_item;
+    //             swap_item = holder;
+    //       }
+    //     }
+    //     allSellBooks2[ticker].push(swap_item); 
+    //     }
+    // }
+    
+    function push_right(uint end, Side side, bytes32 ticker) internal{
+     uint i;
+      if (side == IExc.Side.SELL){
+          uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
+          
+          //duplicate end element
+          allSellBooks2[ticker].push(allSellBooks2[ticker][last]);
+          
+          
+          //readjust elements between insertion spot and new end
+             for (i = last; i > end; i--){
+                 
+              allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+             }
+         } else if (side == IExc.Side.BUY){
+             uint last = SafeMath.sub(allBuyBooks2[ticker].length, 1);
+            
+             allBuyBooks2[ticker].push(allBuyBooks2[ticker][last]);
+          
+          
+          //readjust elements between insertion spot and new end
+             for (i = last; i > end; i--){
+                 
+              allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+             }
+            
+         }
+     }
+     
+    
+     function insert(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             uint i;
-            Order memory swap_item = order;
             if (allSellBooks2[ticker].length == 0){
                 allSellBooks2[ticker].push(order);
             } else {
             
            for (i = 0; i < allSellBooks2[ticker].length; i++) { 
-             if (swap_item.price > allSellBooks2[ticker][i].price){  ///old sign <
-                Order memory holder = allSellBooks2[ticker][i];
-                allSellBooks2[ticker][i] = swap_item;
-                swap_item = holder;
+             if (order.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+               push_right(i, side, ticker);
+               allSellBooks2[ticker][i] = order;
+               return true;
            }
-           //see if last element gets included-- depends oif the length was updated
-           //or just don't update, push last item
         }
-        allSellBooks2[ticker].push(swap_item);
+        
+        allSellBooks2[ticker].push(order);
+        return true;
         }
             
         } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
-        
-            uint i;
-            Order memory swap_item = order;
-            
+             uint i;
             if (allBuyBooks2[ticker].length == 0){
                 allBuyBooks2[ticker].push(order);
-            }
+            } else {
             
            for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
-             if (swap_item.price < allBuyBooks2[ticker][i].price){  ///>
-                Order memory holder = allBuyBooks2[ticker][i];
-                allBuyBooks2[ticker][i] = swap_item;
-                swap_item = holder;
+             if (order.price <= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
+               push_right(i, side, ticker);
+               allBuyBooks2[ticker][i] = order;
+               return true;
            }
-           //see if last element gets included-- depends oif the length was updated
-           //or just don't update, push last item
         }
-        allSellBooks2[ticker].push(swap_item); 
+        
+        allSellBooks2[ticker].push(order);
+        return true;
         }
-    }
+        
+     }
+     
+     return false;
+     }
+     
     
+    function push_left(uint start, Side side, bytes32 ticker) internal{
+        uint i;
+         if (side == IExc.Side.SELL){
+             for (i = start; i < allSellBooks2[ticker].length; i++){
+                 if (i == SafeMath.sub(allSellBooks2[ticker].length, 1)){
+                     delete allSellBooks2[ticker][i];
+                     allSellBooks2[ticker].pop();
+                 }
+               allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.add(i, 1)];
+                 
+             }
+         } else if (side == IExc.Side.BUY){
+             for (i = start; i < allBuyBooks2[ticker].length; i++){
+                  if (i == SafeMath.sub(allBuyBooks2[ticker].length, 1)){
+                     delete allBuyBooks2[ticker][i];
+                     allBuyBooks2[ticker].pop();
+                 }
+               allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.add(i, 1)];
+                 
+             } 
+         }
+    }
     
     function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
@@ -265,16 +355,18 @@ contract Exc is IExc{
              for (i = 0; i < allSellBooks2[ticker].length; i++) {
                  
              if (allSellBooks2[ticker][i].id == swap_item){
-                 if (i == allSellBooks2[ticker].length - 1){
-               delete allSellBooks2[ticker][i];
-               //allSellBooks2[ticker].length--;
-               allSellBooks2[ticker].pop();
-               return true;
-                 }
+            //      if (i == allSellBooks2[ticker].length - 1){
+            //   delete allSellBooks2[ticker][i];
+            //   //allSellBooks2[ticker].length--;
+            //   allSellBooks2[ticker].pop();
+            //   return true;
+            //      }
                  
-                 swap_item = allSellBooks2[ticker][i+1].id;
-                 Order memory holder = allSellBooks2[ticker][i+1];
-                allSellBooks2[ticker][i] = holder;
+                 push_left(i, side, ticker);
+                 return true;
+                //  swap_item = allSellBooks2[ticker][i+1].id;
+                //  Order memory holder = allSellBooks2[ticker][i+1];
+                // allSellBooks2[ticker][i] = holder;
              }
                  
              }
@@ -286,15 +378,20 @@ contract Exc is IExc{
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
                  
              if (allSellBooks2[ticker][i].id == swap_item){
-                 if (i == allBuyBooks2[ticker].length - 1){
-               delete allBuyBooks2[ticker][i];
-               //allBuyBooks2[ticker].length--;
-               allBuyBooks2[ticker].pop();
-               return true;
-                 }
-                 swap_item = allBuyBooks2[ticker][i+1].id;
-                 Order memory holder = allBuyBooks2[ticker][i+1];
-                allBuyBooks2[ticker][i] = holder;
+            //      if (i == allBuyBooks2[ticker].length - 1){
+            //   delete allBuyBooks2[ticker][i];
+            //   //allBuyBooks2[ticker].length--;
+            //   allBuyBooks2[ticker].pop();
+            //   return true;
+            //      }
+            //      swap_item = allBuyBooks2[ticker][i+1].id;
+            //      Order memory holder = allBuyBooks2[ticker][i+1];
+            //     allBuyBooks2[ticker][i] = holder;
+             
+            push_left(i, side, ticker);
+            return true;
+                 
+                 
              }
                  
              }
