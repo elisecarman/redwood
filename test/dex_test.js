@@ -103,6 +103,11 @@ const buy_book = await exc.getOrders(ZRX, SIDE.BUY);
 const order_book = buy_book[0];
 assert.equal(order_book.id, order1.id, 'order added');
 
+
+//
+//let orders = await exc.getOrders(ZRX, SIDE.BUY, {from: trader1 });
+//console.log(orders)
+
 });
 
 });

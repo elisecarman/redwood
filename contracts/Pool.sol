@@ -16,8 +16,8 @@ contract Pool {
     uint private amountTokenP;
     uint private amountToken1;
     uint private price;
-    uint private idSell;
-    uint private idBuy;
+    uint private idSell = 0;
+    uint private idBuy = 0;
     
     // todo: create wallet data structures
     mapping(address => uint) walletP;
@@ -76,25 +76,21 @@ contract Pool {
     payable
     external {
      
-    require(walletP[msg.sender] >= pineAmount && pineAmount != 0 );
-    require(wallet1[msg.sender] >= tokenAmount && tokenAmount != 0);
+    require(walletP[msg.sender] >= pineAmount);
+    require(wallet1[msg.sender] >= tokenAmount);
         
     walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);   
         
-    // if (walletP[msg.sender] >= pineAmount && pineAmount != 0 && wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
-    //     walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
+        IExc(dex).withdraw(tokenAmount, token1T);
+        IExc(dex).withdraw(pineAmount, tokenPT);
         
-       // if (IERC20(tokenP).approve(msg.sender, pineAmount)){
-                IERC20(tokenP).transfer(msg.sender, pineAmount);//}
-    
-       // if (IERC20(token1).approve(msg.sender, tokenAmount)){
-                IERC20(token1).transfer(msg.sender, tokenAmount);//}
+                IERC20(tokenP).transfer(msg.sender, pineAmount);
+                IERC20(token1).transfer(msg.sender, tokenAmount);
                 
         // IERC20(token1).approve(msg.sender, tokenAmount);
         // IERC20(tokenP).approve(msg.sender, pineAmount);
         
-       IExc(dex).withdraw(tokenAmount, token1T);
-        IExc(dex).withdraw(pineAmount, tokenPT);
+       
                 
         amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
         wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
@@ -116,6 +112,8 @@ contract Pool {
     function updateOrders(uint amount) private {
         
          newPrice();
+         
+         if (idBuy != 0 && idSell != 0 ){
             
             IExc(dex).deleteLimitOrder(
                 idSell,
@@ -125,7 +123,8 @@ contract Pool {
             IExc(dex).deleteLimitOrder(
                 idBuy,
                 token1T,
-                IExc.Side.BUY);
+                IExc.Side.BUY); 
+         }
         
         idBuy = uint256(IExc(dex).getNextID());
         
