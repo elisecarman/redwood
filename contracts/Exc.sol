@@ -215,12 +215,13 @@ contract Exc is IExc{
             //allSellBooks2.length++;
             uint i;
             Order memory swap_item = order;
+            
             if (allSellBooks2[ticker].length == 0){
                 allSellBooks2[ticker].push(order);
             } else {
             
           for (i = 0; i < allSellBooks2[ticker].length; i++) { 
-             if (swap_item.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+             if (swap_item.price > allSellBooks2[ticker][i].price){  ///old sign <  //added an equal //removed equal
                 Order memory holder = allSellBooks2[ticker][i];
                 allSellBooks2[ticker][i] = swap_item;
                 swap_item = holder;
@@ -236,16 +237,17 @@ contract Exc is IExc{
             
             if (allBuyBooks2[ticker].length == 0){
                 allBuyBooks2[ticker].push(order);
-            }
+            } else {
             
           for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
-             if (swap_item.price <= allBuyBooks2[ticker][i].price){  ///old sign >
+             if (swap_item.price < allBuyBooks2[ticker][i].price){  ///old sign >
                 Order memory holder = allBuyBooks2[ticker][i];
                 allBuyBooks2[ticker][i] = swap_item;
                 swap_item = holder;
           }
         }
-        allSellBooks2[ticker].push(swap_item); 
+        allBuyBooks2[ticker].push(swap_item); 
+        }
         }
     }
     
@@ -381,7 +383,7 @@ contract Exc is IExc{
              uint swap_item = id;
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
                  
-             if (allSellBooks2[ticker][i].id == swap_item){
+             if (allBuyBooks2[ticker][i].id == swap_item){
                  require(msg.sender == allSellBooks2[ticker][i].trader);
                  if (i == allBuyBooks2[ticker].length - 1){
               delete allBuyBooks2[ticker][i];
