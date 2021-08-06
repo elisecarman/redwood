@@ -22,36 +22,35 @@ contract('Pool', (accounts) => {
         ]));
         exc = await Exc.new();
         fac = await Fac.new();
-        let event = await fac.createPair(
-                        pin.address,
-                        zrx.address,
-                        pin.address,
-                        exc.address,
-                        PIN,
-                        ZRX
-                    );
-        let log = event.logs[0];
-        let poolAd = log.args.pair;
-        const pool = await Pool.at(poolAd);
+
        // pool = await Pool.new();
     });
 
     it('should deposit/ withdraw tokens in pool', async () => {
-    await pin.mint(trader1, 1000);
-    await pin.approve(pool.address,10, {from: trader1});
-    //await exc.addToken (PIN, pin.address);
+     let event = await fac.createPair(
+                            pin.address,
+                            zrx.address,
+                            pin.address,
+                            exc.address,
+                            PIN,
+                            ZRX
+                        );
+            let log = event.logs[0];
+            let poolAd = log.args.pair;
+             pool = await Pool.at(poolAd);
 
+    await zrx.mint(trader1, 1000);
+    await zrx.approve(poolAd,10, {from: trader1});
 
-            const checkMe = await pool.testing(1);
-            assert(checkMe, 5);
-
-    await pool.initialize(trx.address);
 
     await pool.deposit(10, 0, {from: trader1});
     assert.equal(await pool.wallet1(trader1), 10, 'deposit executed');
 
     await exc.withdraw(5, 0, {from: trader1});
-    assert.equal(await pool.wallet1(trader1), 5 , "withdraw executed");
+    const balance = await pool.wallet1[trader1];
+    assert.equal(balance, 5 , "withdraw executed");
+
+
     });
     });
 

@@ -67,17 +67,7 @@ contract Exc is IExc{
      external
      view
       returns(Order[] memory) {
-        // uint i;
-        // uint j;
-        //der[] memory order_list = new Order[](allOrders.length);
         
-        // for (i = 0; i < allOrders.length; i++) {  
-        // if (allOrders[i] != 0){
-        //     order_list[j] = orders[allOrders[i]];
-        //     j++;
-        // }
-        // i++;
-        // }
        if (side == IExc.Side.BUY){
            return allBuyBooks2[ticker];
        } else if  (side == IExc.Side.BUY){
@@ -95,12 +85,15 @@ contract Exc is IExc{
       external 
       view 
       returns(Token[] memory) {
-        uint i;
+        //uint i;
         Token[] memory tok_list = new Token[](tokenList.length);
-          for (i = 0; i < tokenList.length; i++) {
-         tok_list[i]= tokens[tokenList[i]];
-          }
-          return tok_list;
+        //   for (i = 0; i < tokenList.length; i++) {
+        //       if ( tokens[tokenList[i]].tokenAddress != address(0)){
+        //  tok_list[i]= tokens[tokenList[i]];
+        //       }
+        //   }
+           return tok_list;
+        
        
     }
     
@@ -110,9 +103,8 @@ contract Exc is IExc{
         address tokenAddress)
         external {
         if (!contains_token[ticker]){
-            Token memory newToken = Token(ticker, tokenAddress);
+        Token memory newToken = Token(ticker, tokenAddress);
         tokens[ticker] = newToken;
-        tokenList.length++;
         tokenList.push(ticker);
         contains_token[ticker] = true;
         }
@@ -188,7 +180,36 @@ contract Exc is IExc{
         //allOrders[newOrder.id]= newOrder.id;
     }
     
-    function insert(Order memory order, Side side, bytes32 ticker) internal{
+    
+        //  uint id;
+        // address trader;
+        // Side side;
+        // bytes32 ticker;
+        // uint amount;
+        // uint filled;
+        // uint price;
+        // uint date;
+        
+    function make_Order(uint id, 
+    address trader, 
+    Side side, 
+    bytes32 ticker, 
+    uint amount, 
+    uint filled, 
+    uint price)public returns (Order memory) {
+       Order memory order = IExc.Order(id,
+        trader, 
+        side, 
+        ticker, 
+        amount, 
+        filled, 
+        price, 
+        now);
+        
+        return order;
+    }
+    
+    function insert(Order memory order, Side side, bytes32 ticker) public{
         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             //allSellBooks2.length++;
             uint i;
@@ -242,7 +263,7 @@ contract Exc is IExc{
              if (allSellBooks2[ticker][i].id == swap_item){
                  if (i == allSellBooks2[ticker].length - 1){
                delete allSellBooks2[ticker][i];
-               allSellBooks2[ticker].length--;
+               //allSellBooks2[ticker].length--;
                return true;
                  }
                  swap_item = allSellBooks2[ticker][i+1].id;
@@ -261,7 +282,7 @@ contract Exc is IExc{
              if (allSellBooks2[ticker][i].id == swap_item){
                  if (i == allBuyBooks2[ticker].length - 1){
                delete allBuyBooks2[ticker][i];
-               allBuyBooks2[ticker].length--;
+               //allBuyBooks2[ticker].length--;
                return true;
                  }
                  swap_item = allBuyBooks2[ticker][i+1].id;
@@ -317,7 +338,7 @@ contract Exc is IExc{
         for (i = 0; i < allSellBooks2[ticker].length; i++) {
             if (i == (allSellBooks2[ticker].length -1)){
                 delete allSellBooks2[ticker][i];
-                allSellBooks2[ticker].length--; 
+               // allSellBooks2[ticker].length--; 
                 }
          allSellBooks2[ticker][i] = swap_item;
          swap_item = allSellBooks2[ticker][i + 1];
@@ -329,7 +350,7 @@ contract Exc is IExc{
         for (i = 0; i < allBuyBooks2[ticker].length; i++) {
             if (i == (allBuyBooks2[ticker].length -1)){
                 delete allBuyBooks2[ticker][i];
-                allBuyBooks2[ticker].length--; 
+                //allBuyBooks2[ticker].length--; 
                 }
          allBuyBooks2[ticker][i] = swap_item;
          swap_item = allBuyBooks2[ticker][i + 1];

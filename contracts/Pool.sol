@@ -51,8 +51,8 @@ contract Pool {
     external {
     
       
-   /// if (IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount) &&
-   /// IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount)){
+    IERC20(tokenP).transferFrom(msg.sender, address(this), pineAmount);
+    IERC20(token1).transferFrom(msg.sender, address(this), tokenAmount);
        
         walletP[msg.sender] = SafeMath.add(walletP[msg.sender], pineAmount);
         amountTokenP = SafeMath.add(amountTokenP, pineAmount);
@@ -60,24 +60,41 @@ contract Pool {
         wallet1[msg.sender] = SafeMath.add(wallet1[msg.sender], tokenAmount);
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
-         updateOrders(amountToken1);
-   /// }
-       
+        
+        IERC20(token1).approve(dex, tokenAmount);
+        IERC20(tokenP).approve(dex, pineAmount);
+        
+       IExc(dex).deposit(tokenAmount, token1T);
+        IExc(dex).deposit(pineAmount, tokenPT);
+        
+        
+        updateOrders(amountToken1);
 
    }
 
     function withdraw(uint tokenAmount, uint pineAmount) 
     payable
     external {
+     
+    require(walletP[msg.sender] >= pineAmount && pineAmount != 0 );
+    require(wallet1[msg.sender] >= tokenAmount && tokenAmount != 0);
         
-    if (walletP[msg.sender] >= pineAmount && pineAmount != 0 && wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
-        walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
+    walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);   
         
-        if (IERC20(tokenP).approve(msg.sender, pineAmount)){
-                IERC20(tokenP).transfer(msg.sender, pineAmount);}
+    // if (walletP[msg.sender] >= pineAmount && pineAmount != 0 && wallet1[msg.sender] >= tokenAmount && tokenAmount != 0){
+    //     walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
+        
+       // if (IERC20(tokenP).approve(msg.sender, pineAmount)){
+                IERC20(tokenP).transfer(msg.sender, pineAmount);//}
     
-        if (IERC20(token1).approve(msg.sender, tokenAmount)){
-                IERC20(token1).transfer(msg.sender, tokenAmount);}
+       // if (IERC20(token1).approve(msg.sender, tokenAmount)){
+                IERC20(token1).transfer(msg.sender, tokenAmount);//}
+                
+        // IERC20(token1).approve(msg.sender, tokenAmount);
+        // IERC20(tokenP).approve(msg.sender, pineAmount);
+        
+       IExc(dex).withdraw(tokenAmount, token1T);
+        IExc(dex).withdraw(pineAmount, tokenPT);
                 
         amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
         wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
@@ -85,7 +102,7 @@ contract Pool {
             
             
         updateOrders(amountToken1);
-            }
+           // }
         
             
     }

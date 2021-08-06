@@ -352,6 +352,83 @@
 				"constant": false,
 				"inputs": [
 					{
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"name": "trader",
+						"type": "address"
+					},
+					{
+						"name": "side",
+						"type": "uint8"
+					},
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					},
+					{
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"name": "filled",
+						"type": "uint256"
+					},
+					{
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "make_Order",
+				"outputs": [
+					{
+						"components": [
+							{
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"name": "trader",
+								"type": "address"
+							},
+							{
+								"name": "side",
+								"type": "uint8"
+							},
+							{
+								"name": "ticker",
+								"type": "bytes32"
+							},
+							{
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"name": "filled",
+								"type": "uint256"
+							},
+							{
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"name": "date",
+								"type": "uint256"
+							}
+						],
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
 						"name": "amount",
 						"type": "uint256"
 					},
@@ -415,6 +492,62 @@
 				],
 				"payable": false,
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"components": [
+							{
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"name": "trader",
+								"type": "address"
+							},
+							{
+								"name": "side",
+								"type": "uint8"
+							},
+							{
+								"name": "ticker",
+								"type": "bytes32"
+							},
+							{
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"name": "filled",
+								"type": "uint256"
+							},
+							{
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"name": "date",
+								"type": "uint256"
+							}
+						],
+						"name": "order",
+						"type": "tuple"
+					},
+					{
+						"name": "side",
+						"type": "uint8"
+					},
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					}
+				],
+				"name": "insert",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -512,9 +645,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x5361359a7e4a95a08f1af58656fdc0d2ae91202a5205e1cc3072f13e3d8ea404",
+			"keccak256": "0xf54a846dac91c6930553668fdcde64ec2d0920b3bb97ed7ce2d2cf37c751b3fc",
 			"urls": [
-				"bzzr://f01d2091273b91fba5e15b79167ba6927d5498e4849a8d239bb0ade248e11c00"
+				"bzzr://e48fa7230eec044f401343844e659271217576a4c97f89697406b5055d7a5a0c"
 			]
 		},
 		"contracts/Heap.sol": {
