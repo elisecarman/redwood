@@ -462,8 +462,8 @@ contract Exc is IExc{
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
                   //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
-                 // uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
-                 // require (traderBalances[msg.sender][PIN] >= to_pay);
+                  uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
+                  require (traderBalances[msg.sender][PIN] >= to_pay);
                   
                   remove_max(IExc.Side.SELL, ticker);
                   new_amount = new_amount - (max_order.amount - max_order.filled);
@@ -491,8 +491,8 @@ contract Exc is IExc{
                  max_order = allSellBooks2[ticker][last2];
                   }
                   
-                 // uint to_pay = SafeMath.mul(new_amount, max_order.price);
-                 // require (traderBalances[msg.sender][PIN] >= to_pay);
+                  uint to_pay = SafeMath.mul(new_amount, max_order.price);
+                  require (traderBalances[msg.sender][PIN] >= to_pay);
                   
                   max_order.filled += new_amount;
                   
