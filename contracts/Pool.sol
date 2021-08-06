@@ -20,8 +20,8 @@ contract Pool {
     uint private idBuy = 0;
     
     // todo: create wallet data structures
-    mapping(address => uint) walletP;
-    mapping(address => uint) wallet1;
+    mapping(address => uint) public walletP;
+    mapping(address => uint) public wallet1;
     
    
     
@@ -68,7 +68,7 @@ contract Pool {
         IExc(dex).deposit(pineAmount, tokenPT);
         
         
-        updateOrders(amountToken1);
+       // updateOrders(amountToken1);
 
    }
 
@@ -97,7 +97,7 @@ contract Pool {
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
             
             
-        updateOrders(amountToken1);
+      //  updateOrders(amountToken1);
            // }
         
             
@@ -134,7 +134,8 @@ contract Pool {
                 newPrice(),
                 IExc.Side.BUY);
                 
-        idSell = uint256(IExc(dex).getNextID());        
+        idSell = uint256(IExc(dex).getNextID()); 
+        
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,    

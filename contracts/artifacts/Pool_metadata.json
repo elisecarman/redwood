@@ -27,6 +27,25 @@
 				"constant": true,
 				"inputs": [
 					{
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "walletP",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
 						"name": "testMe",
 						"type": "uint256"
 					}
@@ -74,6 +93,25 @@
 				"outputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "wallet1",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -134,9 +172,9 @@
 			]
 		},
 		"contracts/Pool.sol": {
-			"keccak256": "0x90b34d126aa8316a880bfde92ba25db3522e8ab7e989448ad50e8ec48216b86a",
+			"keccak256": "0xaa7762db31754c5fb8c36471053778759e284aa6512a14bb6de4f567ce4a1527",
 			"urls": [
-				"bzzr://0e3122ed47e10b38e692c51db7ee85328b5dfca6dbc32c139f3514d226a48ce3"
+				"bzzr://36142472ea3d0194f109a5b5b49c913d23dbdcf22a591a1e7174f1c6f8df5eac"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {

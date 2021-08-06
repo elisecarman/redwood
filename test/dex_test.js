@@ -96,7 +96,8 @@ console.log(order4);
 //        date);
 
 
-//await exc.insert(order1, 0, ZRX);//SIDE.BUY
+await exc.insert(order1, 0, ZRX);//SIDE.BUY
+
 const buy_book = await exc.getOrders(ZRX, SIDE.BUY);
 //console.log(buy_book.length);
 //console.log(tokenList);
