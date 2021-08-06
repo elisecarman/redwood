@@ -384,7 +384,7 @@ contract Exc is IExc{
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
                  
              if (allBuyBooks2[ticker][i].id == swap_item){
-                 require(msg.sender == allSellBooks2[ticker][i].trader);
+                 require(msg.sender == allBuyBooks2[ticker][i].trader);
                  if (i == allBuyBooks2[ticker].length - 1){
               delete allBuyBooks2[ticker][i];
               //allBuyBooks2[ticker].length--;
@@ -515,7 +515,7 @@ contract Exc is IExc{
                  require(traderBalances[msg.sender][ticker] >= amount);
                  require(ticker != PIN);
                  
-                  uint last = allSellBooks2[ticker].length - 1;
+                  uint last = allBuyBooks2[ticker].length - 1;
                 Order memory max_order = allBuyBooks2[ticker][last];
                  uint new_amount = amount;
                  
@@ -546,7 +546,7 @@ contract Exc is IExc{
                  // delete(orders[id]); 
                  // allOrders[id]= 0;
                  
-                  uint last2 = allSellBooks2[ticker].length - 1;
+                  uint last2 = allBuyBooks2[ticker].length - 1;
                  max_order = allBuyBooks2[ticker][last2];
                  // id = allSellBooks[ticker].getMax().id;
                   }
