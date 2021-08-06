@@ -85,13 +85,15 @@ contract Exc is IExc{
       external 
       view 
       returns(Token[] memory) {
-        //uint i;
+        uint i;
         Token[] memory tok_list = new Token[](tokenList.length);
-        //   for (i = 0; i < tokenList.length; i++) {
-        //       if ( tokens[tokenList[i]].tokenAddress != address(0)){
-        //  tok_list[i]= tokens[tokenList[i]];
-        //       }
-        //   }
+        
+          for (i = 0; i < tokenList.length; i++) {
+              if ( tokens[tokenList[i]].tokenAddress != address(0)){
+         tok_list[i]= tokens[tokenList[i]];
+              }
+          }
+          
            return tok_list;
         
        
@@ -117,12 +119,12 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
-            if (contains_token[ticker]){
+            require (contains_token[ticker]);
             IERC20(tokens[ticker].tokenAddress).transferFrom(msg.sender, address(this), amount); 
             ///how to find address of exchange?
             
             traderBalances[msg.sender][ticker] += amount; 
-            }
+            
     }
     
     // todo: implement withdraw, which should do the opposite of deposit. The trader should not be able to withdraw more than
@@ -131,12 +133,12 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
-                        if (traderBalances[msg.sender][ticker] >= amount){
-            if (IERC20(tokens[ticker].tokenAddress).approve(address(this), amount)){
+            require(traderBalances[msg.sender][ticker] >= amount);
+            //IERC20(tokens[ticker].tokenAddress).approve(address(this), amount);
             IERC20(tokens[ticker].tokenAddress).transfer(msg.sender, amount);
-            }
+            
             traderBalances[msg.sender][ticker] -= amount;
-            }
+            
     }
     
     // todo: implement makeLimitOrder, which creates a limit order based on the parameters provided. This method should only be
@@ -152,23 +154,25 @@ contract Exc is IExc{
         Side side)
         external {
             
-        uint countS1 =  allSellBooks2[ticker].length;
-        uint countB1 =  allBuyBooks2[ticker].length;
-            
+        
+         if (side == IExc.Side.SELL){
+          require(ticker != PIN && contains_token[ticker] && traderBalances[msg.sender][ticker] >= amount);
+             
+         } else if (side == IExc.Side.BUY){
+              require(ticker != PIN && contains_token[ticker] && traderBalances[msg.sender][PIN] >= SafeMath.mul(amount, price));
+         }
+         
        
             
-        require(ticker != PIN && contains_token[ticker] && traderBalances[msg.sender][ticker] >= amount);    
+           
             
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
         id_ticker ++;
-        //uint i;
-        
         
         insert(newOrder, side, ticker);
         
-         uint countS2 =  allSellBooks2[ticker].length;
-        uint countB2 =  allBuyBooks2[ticker].length;
+         
         
         // if (countS2 > countS1 || countB2 > countB1){
         //     event.
@@ -228,7 +232,7 @@ contract Exc is IExc{
            //or just don't update, push last item
         }
         allSellBooks2[ticker].push(swap_item);
-            }
+        }
             
         } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
         
@@ -264,8 +268,10 @@ contract Exc is IExc{
                  if (i == allSellBooks2[ticker].length - 1){
                delete allSellBooks2[ticker][i];
                //allSellBooks2[ticker].length--;
+               allSellBooks2[ticker].pop();
                return true;
                  }
+                 
                  swap_item = allSellBooks2[ticker][i+1].id;
                  Order memory holder = allSellBooks2[ticker][i+1];
                 allSellBooks2[ticker][i] = holder;
@@ -283,6 +289,7 @@ contract Exc is IExc{
                  if (i == allBuyBooks2[ticker].length - 1){
                delete allBuyBooks2[ticker][i];
                //allBuyBooks2[ticker].length--;
+               allBuyBooks2[ticker].pop();
                return true;
                  }
                  swap_item = allBuyBooks2[ticker][i+1].id;
@@ -338,7 +345,7 @@ contract Exc is IExc{
         for (i = 0; i < allSellBooks2[ticker].length; i++) {
             if (i == (allSellBooks2[ticker].length -1)){
                 delete allSellBooks2[ticker][i];
-               // allSellBooks2[ticker].length--; 
+                allSellBooks2[ticker].pop();
                 }
          allSellBooks2[ticker][i] = swap_item;
          swap_item = allSellBooks2[ticker][i + 1];
@@ -350,6 +357,7 @@ contract Exc is IExc{
         for (i = 0; i < allBuyBooks2[ticker].length; i++) {
             if (i == (allBuyBooks2[ticker].length -1)){
                 delete allBuyBooks2[ticker][i];
+                allBuyBooks2[ticker].pop();
                 //allBuyBooks2[ticker].length--; 
                 }
          allBuyBooks2[ticker][i] = swap_item;
@@ -373,7 +381,7 @@ contract Exc is IExc{
              if (side == IExc.Side.BUY){
                  
                  require(contains_token[ticker]);
-                 require(traderBalances[msg.sender][PIN] >= amount);
+                 //require(traderBalances[msg.sender][PIN] >= SafeMath.mul(amount, price));
                  require(ticker != PIN);
                  
                  //uint id = allSellBooks[ticker].getMax().id;
@@ -382,8 +390,9 @@ contract Exc is IExc{
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
                   //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
+                  
                   remove_max(IExc.Side.SELL, ticker);
-                  uint new_amount = amount - (max_order.amount - max_order.filled);
+                  new_amount = new_amount - (max_order.amount - max_order.filled);
                   
                   emit NewTrade(trade_ticker, 
                             max_order.id,
@@ -401,14 +410,10 @@ contract Exc is IExc{
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] -= new_amount;
                 traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
-                
-                   //update information     
+                      
                   trade_ticker++;          
-                 // delete(orders[id]); 
-                 // allOrders[id]= 0;
                  
                  max_order = allSellBooks2[ticker][0];
-                 // id = allSellBooks[ticker].getMax().id;
                   }
                   
                   max_order.filled += new_amount;
@@ -427,13 +432,18 @@ contract Exc is IExc{
                  
               //record event
              } else if (side == IExc.Side.SELL){
+                 
+                  require(contains_token[ticker]);
+                 require(traderBalances[msg.sender][ticker] >= amount);
+                 require(ticker != PIN);
+                 
                 Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
                   //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
                   remove_max(IExc.Side.BUY, ticker);
-                  uint new_amount = amount - (max_order.amount - max_order.filled);
+                  new_amount = new_amount - (max_order.amount - max_order.filled);
                   
                   emit NewTrade(trade_ticker, 
                             max_order.id,
