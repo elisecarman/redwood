@@ -332,17 +332,24 @@ contract Exc is IExc{
     function remove_max(Side side, bytes32 ticker) internal{
         if (side == IExc.Side.SELL){
      
-        uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
-        delete allSellBooks2[ticker][last];
-        allSellBooks2[ticker].pop();
-        
+        for (uint i = 0; i < allSellBooks2[ticker].length; i++) {
+            if (i == allSellBooks2[ticker].length - 1){
+                delete allSellBooks2[ticker][i];
+                allSellBooks2[ticker].pop();
+            }
+            allSellBooks2[ticker][i] = allSellBooks2[ticker][i + 1];
+        }
         
     } else if (side == IExc.Side.BUY){
    
+        for (uint i = 0; i < allBuyBooks2[ticker].length; i++) {
+            if (i == allBuyBooks2[ticker].length - 1){
+                delete allBuyBooks2[ticker][i];
+                allBuyBooks2[ticker].pop();
+            }
+            allBuyBooks2[ticker][i] = allBuyBooks2[ticker][i + 1];
+        }
     
-    uint last = SafeMath.sub(allBuyBooks2[ticker].length, 1);
-        delete allBuyBooks2[ticker][last];
-        allBuyBooks2[ticker].pop();
     }
     }
     
@@ -366,7 +373,8 @@ contract Exc is IExc{
                  
                  //uint id = allSellBooks[ticker].getMax().id;
                  uint last = allSellBooks2[ticker].length - 1;
-                 Order memory max_order = allSellBooks2[ticker][last];
+                // Order memory max_order = allSellBooks2[ticker][last];
+                Order memory max_order = allSellBooks2[ticker][0];
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
@@ -398,8 +406,8 @@ contract Exc is IExc{
                       
                   trade_ticker++;          
                  
-                 uint last2 = allSellBooks2[ticker].length - 1;
-                 max_order = allSellBooks2[ticker][last2];
+                // uint last2 = allSellBooks2[ticker].length - 1;
+                 max_order = allSellBooks2[ticker][0];
                   }
                   
                   uint to_pay = SafeMath.mul(new_amount, max_order.price);
@@ -427,7 +435,7 @@ contract Exc is IExc{
                  require(ticker != PIN);
                  
                   uint last = allBuyBooks2[ticker].length - 1;
-                Order memory max_order = allBuyBooks2[ticker][last];
+                Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
@@ -458,8 +466,8 @@ contract Exc is IExc{
                  // delete(orders[id]); 
                  // allOrders[id]= 0;
                  
-                  uint last2 = allBuyBooks2[ticker].length - 1;
-                 max_order = allBuyBooks2[ticker][last2];
+                  //uint last2 = allBuyBooks2[ticker].length - 1;
+                 max_order = allBuyBooks2[ticker][0];
                  // id = allSellBooks[ticker].getMax().id;
                   }
                   
