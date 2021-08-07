@@ -485,16 +485,15 @@ contract Exc is IExc{
     }
     
     
- function insert(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+ function insert(Order memory order, Side side, bytes32 ticker) public returns (bool) {
          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
-            uint i;
             if (allSellBooks2[ticker].length == 0){
                 allSellBooks2[ticker].push(order);
                 return true;
                 
             } else {
             
-          for (i = 0; i < allSellBooks2[ticker].length; i++) { 
+          for (uint i = 0; i < allSellBooks2[ticker].length; i++) { 
              if (order.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
               push_right(i, side, ticker);
               allSellBooks2[ticker][i] = order;
@@ -505,16 +504,15 @@ contract Exc is IExc{
         allSellBooks2[ticker].push(order);
         return true;
         }
-            
+        
         } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
-             uint i;
             if (allBuyBooks2[ticker].length == 0){
                 allBuyBooks2[ticker].push(order);
                 return true;
                 
             } else {
             
-          for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
+          for (uint i = 0; i < allBuyBooks2[ticker].length; i++) { 
              if (order.price <= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
               push_right(i, side, ticker);
               allBuyBooks2[ticker][i] = order;
@@ -534,7 +532,7 @@ contract Exc is IExc{
 
 
   function push_right(uint end, Side side, bytes32 ticker) internal{
-     uint i;
+    
       if (side == IExc.Side.SELL){
           uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
           
@@ -544,7 +542,7 @@ contract Exc is IExc{
           
           
           //readjust elements between insertion spot and new end
-             for (i = last; i > end; i--){
+             for (uint i = last; i > end; i--){
                  
               allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.sub(i, 1)];
                  
@@ -556,7 +554,7 @@ contract Exc is IExc{
           
           
           //readjust elements between insertion spot and new end
-             for (i = last; i > end; i--){
+             for (uint i = last; i > end; i--){
                  
               allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.sub(i, 1)];
                  
