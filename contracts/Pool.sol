@@ -70,7 +70,7 @@ contract Pool {
        IExc(dex).deposit(tokenAmount, token1T);
         IExc(dex).deposit(pineAmount, tokenPT);
         
-      // updateOrders(amountToken1);
+      updateOrders(amountToken1);
 
    }
 
@@ -99,7 +99,7 @@ contract Pool {
         amountToken1 = SafeMath.sub(amountToken1, tokenAmount);
         amountTokenP = SafeMath.sub(amountTokenP, pineAmount);   
             
-        //updateOrders(amountToken1);
+        updateOrders(amountToken1);
            // }
         
             

@@ -374,7 +374,7 @@ contract Exc is IExc{
                 Order memory max_order = allSellBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((max_order.amount - max_order.filled) <= new_amount){
+                  while ((max_order.amount - max_order.filled) < new_amount){
                       
                   uint to_pay = (max_order.amount - max_order.filled) * max_order.price;
                   require(traderBalances[msg.sender][PIN] >= to_pay);
@@ -442,7 +442,7 @@ contract Exc is IExc{
                 Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((max_order.amount - max_order.filled) <= new_amount){
+                  while ((max_order.amount - max_order.filled) < new_amount){
                   remove_max(IExc.Side.BUY, ticker);
                   new_amount = new_amount - (max_order.amount - max_order.filled);
                   
@@ -455,12 +455,12 @@ contract Exc is IExc{
                             max_order.price,
                             now);
                             
-                //update balances- Buyer
+                //update balances- Seller
                 traderBalances[msg.sender][ticker] -= (max_order.amount - max_order.filled);
                 
                 traderBalances[msg.sender][PIN] += ((max_order.amount - max_order.filled) * max_order.price) ;
                 
-                //update balances- Seller
+                //update balances- Buyer
                 traderBalances[max_order.trader][ticker] += (max_order.amount - max_order.filled);
                 
                 traderBalances[max_order.trader][PIN] -= ((max_order.amount - max_order.filled) * max_order.price);
@@ -484,7 +484,7 @@ contract Exc is IExc{
                 traderBalances[msg.sender][ticker] -= new_amount;
                  traderBalances[msg.sender][PIN] += (new_amount * max_order.price) ;
                 
-                //update balances- Seller
+                //update balances- Buyer
                 traderBalances[max_order.trader][ticker] += new_amount;
                 traderBalances[max_order.trader][PIN] -= (new_amount * max_order.price);
                             
@@ -509,15 +509,6 @@ contract Exc is IExc{
                 allSellBooks2[ticker].push(order);
                 return true;
                 
-            
-            // } else if (allSellBooks2[ticker].length == 1){
-            //     if ( order.price > allSellBooks2[ticker][0].price){
-            //         Order memory add = allSellBooks2[ticker][0];
-            //         allSellBooks2[ticker].push(add);
-            //         allSellBooks2[ticker][0] = order;
-            //     } else {
-            //          allSellBooks2[ticker].push(order);
-            //     }
                 
             }
             else {
@@ -648,8 +639,6 @@ contract Exc is IExc{
              return false;
          }
     }
-
-
 
 }
 
