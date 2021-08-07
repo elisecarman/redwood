@@ -148,7 +148,8 @@ contract Exc is IExc{
         uint amount,
         uint price,
         Side side)
-        external {
+        external 
+        returns (uint){
             
         
          if (side == IExc.Side.SELL){
@@ -165,6 +166,7 @@ contract Exc is IExc{
         
         insert(newOrder, side, ticker);
         
+        return order_id;
         //   uint id;
         // address trader;
         // Side side;

@@ -651,7 +651,12 @@
 					}
 				],
 				"name": "makeLimitOrder",
-				"outputs": [],
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -725,9 +730,9 @@
 	},
 	"sources": {
 		"redwood/contracts/Exc.sol": {
-			"keccak256": "0x608bb0ae3560b3107c95f1b8ff1971c71e57c2065035b735bdcba4a7bdad8079",
+			"keccak256": "0xc6401fe3163773f83136cea9edcf9f9d2c6876ad8e5f40a0fbf3dc8236c24340",
 			"urls": [
-				"bzzr://b191815082c77e995315849d3d863edcec5ae67b52b7b7a550590f14cdcf9683"
+				"bzzr://1170320e170f7c56d809e925ee3d782378ac84a63ada0253976f071e3467e73c"
 			]
 		},
 		"redwood/contracts/Heap.sol": {
@@ -737,9 +742,9 @@
 			]
 		},
 		"redwood/contracts/IExc.sol": {
-			"keccak256": "0xbba3e4288d23794cab255dfa630c1ca9ffb0300ef13da68a71f9b6a5b6aaac03",
+			"keccak256": "0xea278e71348afc2ef6c0ffd018174a53d48ada3b337755543c1c77077d714705",
 			"urls": [
-				"bzzr://42c56f55155fd9a90509a4a4502e9b41e76b420a725ab4fa3a448c5f88584f91"
+				"bzzr://e7e6d2559c079b2b9957d92112b2d6714cc5f8aa9bf9d1a5b7289168a6602c6d"
 			]
 		},
 		"redwood/contracts/libraries/GSN/Context.sol": {

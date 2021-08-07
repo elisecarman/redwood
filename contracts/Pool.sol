@@ -130,17 +130,17 @@ contract Pool {
                 IExc.Side.BUY); 
          }
         
-        idBuy = IExc(dex).getNextID();
+        //idBuy = IExc(dex).getNextID();
         
-            IExc(dex).makeLimitOrder(
+        idBuy = IExc(dex).makeLimitOrder(
                 token1T,
                 amount,  
                 price,
                 IExc.Side.BUY);
                 
-        idSell = IExc(dex).getNextID(); 
+        //idSell = IExc(dex).getNextID(); 
         
-            IExc(dex).makeLimitOrder(
+        idSell = IExc(dex).makeLimitOrder(
                 token1T,
                 amount,    
                 price,

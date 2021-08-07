@@ -60,7 +60,7 @@ interface IExc {
         uint amount,
         uint price,
         Side side)
-        external;
+        external returns (uint);
     
         function deleteLimitOrder(
         uint id,
