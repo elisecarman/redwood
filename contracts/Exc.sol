@@ -395,14 +395,14 @@ contract Exc is IExc{
                             now);
                             
                 //update balances- Buyer
-                traderBalances[msg.sender][ticker] += new_amount;
+                traderBalances[msg.sender][ticker] += (max_order.amount - max_order.filled);
                 //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
-                 traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
+                 traderBalances[msg.sender][PIN] -= ((max_order.amount - max_order.filled) * max_order.price) ;
                 
                 //update balances- Seller
-                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][ticker] -= (max_order.amount - max_order.filled);
                 //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
-                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
+                traderBalances[max_order.trader][PIN] += ((max_order.amount - max_order.filled) * max_order.price);
                       
                   trade_ticker++;          
                  
@@ -423,6 +423,14 @@ contract Exc is IExc{
                             new_amount,
                             max_order.price,
                             now);
+                            
+                traderBalances[msg.sender][ticker] += new_amount;
+                 traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
+                             
                             
                 trade_ticker++;    
                // market_order_ticker++; 
@@ -453,14 +461,14 @@ contract Exc is IExc{
                             now);
                             
                 //update balances- Buyer
-                traderBalances[msg.sender][ticker] += new_amount;
+                traderBalances[msg.sender][ticker] -= (max_order.amount - max_order.filled);
                 //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
-                traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
+                traderBalances[msg.sender][PIN] += ((max_order.amount - max_order.filled) * max_order.price) ;
                 
                 //update balances- Seller
-                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][ticker] += (max_order.amount - max_order.filled);
                 //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
-                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
+                traderBalances[max_order.trader][PIN] -= ((max_order.amount - max_order.filled) * max_order.price);
                    //update information     
                   trade_ticker++;          
                  // delete(orders[id]); 
@@ -481,6 +489,13 @@ contract Exc is IExc{
                             new_amount,
                             max_order.price,
                             now);
+                            
+                traderBalances[msg.sender][ticker] -= new_amount;
+                 traderBalances[msg.sender][PIN] += (new_amount * max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] += new_amount;
+                traderBalances[max_order.trader][PIN] -= (new_amount * max_order.price);
                             
                 trade_ticker++;    
     }
