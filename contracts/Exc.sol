@@ -493,7 +493,7 @@ contract Exc is IExc{
                 
             } else if (allSellBooks2[ticker].length == 1){
                 if ( order.price > allSellBooks2[ticker][0].price){
-                    Order memory add = allSellBooks2[ticker][0]
+                    Order memory add = allSellBooks2[ticker][0];
                     allSellBooks2[ticker].push(add);
                     allSellBooks2[ticker][0] = order;
                 } else {
@@ -522,7 +522,7 @@ contract Exc is IExc{
                 
             } else if (allBuyBooks2[ticker].length == 1){
                 if ( order.price < allBuyBooks2[ticker][0].price){
-                    Order memory add = allBuyBooks2[ticker][0]
+                    Order memory add = allBuyBooks2[ticker][0];
                     allBuyBooks2[ticker].push(add);
                     allBuyBooks2[ticker][0] = order;
                 } else {
