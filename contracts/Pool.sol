@@ -16,8 +16,8 @@ contract Pool {
     uint private amountTokenP;
     uint private amountToken1;
     uint private price;
-    uint private idSell = 0;
-    uint private idBuy = 0;
+    uint private idSell;
+    uint private idBuy;
     
     // todo: create wallet data structures
     mapping(address => uint) public walletP;
@@ -40,6 +40,9 @@ contract Pool {
             tokenP = _token1;
             token1 = _token0;
         }
+        
+        idSell = 0;
+        idBuy = 0;
         
         if (!IExc(dex).has_token(token1T)){
            IExc(dex).addToken(token1T, token1); 
