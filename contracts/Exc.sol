@@ -186,6 +186,12 @@ contract Exc is IExc{
             if (side == IExc.Side.SELL){
                 
             uint length = allSellBooks2[ticker].length;
+            if (length == 1){
+                delete allSellBooks2[ticker][0];
+                allSellBooks2[ticker].pop();
+                return true;
+            }
+            
             for (uint i = 0; i < length; i++) {
               // Same trader is deleting it
               if (allSellBooks2[ticker][i].id == id && allSellBooks2[ticker][i].trader == msg.sender) {
@@ -197,9 +203,16 @@ contract Exc is IExc{
                 return true;
               }
             }
+            
           
             } else if (side == IExc.Side.BUY){
                uint length = allBuyBooks2[ticker].length;
+               if (length == 1){
+                   delete allBuyBooks2[ticker][0];
+                   allBuyBooks2[ticker].pop();
+                   return true;
+               }
+               
             for (uint i = 0; i < length; i++) {
               // Same trader is deleting it
               if (allBuyBooks2[ticker][i].id == id && allBuyBooks2[ticker][i].trader == msg.sender) {
