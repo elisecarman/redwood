@@ -130,7 +130,7 @@ contract Pool {
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,  
-                newPrice(),
+                price,
                 IExc.Side.BUY);
                 
         idSell = uint256(IExc(dex).getNextID()); 
@@ -138,7 +138,7 @@ contract Pool {
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,    
-                newPrice(),
+                price,
                 IExc.Side.SELL);
         
     }
