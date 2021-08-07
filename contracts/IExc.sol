@@ -76,5 +76,8 @@ interface IExc {
         
     
     function getNextID() external returns (uint);
+    
+    
+    function has_token(bytes32 ticker) external returns (bool);
 }
 

@@ -40,6 +40,10 @@ contract Pool {
             tokenP = _token1;
             token1 = _token0;
         }
+        
+        if (!IExc(dex).has_token(token1T)){
+           IExc(dex).addToken(token1T, token1); 
+        }
     }
     
     // todo: implement wallet functionality and trading functionality
@@ -106,6 +110,7 @@ contract Pool {
         
         uint new_price = SafeMath.div(amountTokenP, amountToken1);
         price = new_price;
+        return new_price;
     }
     
     function updateOrders(uint amount) private {
@@ -125,7 +130,7 @@ contract Pool {
                 IExc.Side.BUY); 
          }
         
-        idBuy = uint256(IExc(dex).getNextID());
+        idBuy = IExc(dex).getNextID();
         
             IExc(dex).makeLimitOrder(
                 token1T,
@@ -133,13 +138,18 @@ contract Pool {
                 price,
                 IExc.Side.BUY);
                 
-        idSell = uint256(IExc(dex).getNextID()); 
+        idSell = IExc(dex).getNextID(); 
         
             IExc(dex).makeLimitOrder(
                 token1T,
                 amount,    
                 price,
                 IExc.Side.SELL);
+                
+        //           bytes32 ticker,
+        // uint amount,
+        // uint price,
+        // Side side)
         
     }
 

@@ -85,9 +85,9 @@ contract Exc is IExc{
         Token[] memory tok_list = new Token[](tokenList.length);
         
           for (uint i = 0; i < tokenList.length; i++) {
-              if ( tokens[tokenList[i]].tokenAddress != address(0)){
+              //if ( tokens[tokenList[i]].tokenAddress != address(0)){
          tok_list[i]= tokens[tokenList[i]];
-              }
+           //   }
           }
           
            return tok_list;
@@ -498,6 +498,9 @@ contract Exc is IExc{
         return id_ticker;
     }
     
+    function has_token(bytes32 ticker) external returns (bool){
+        return contains_token[ticker];
+    }
     
  function insert(Order memory order, Side side, bytes32 ticker) public returns (bool) {
          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE

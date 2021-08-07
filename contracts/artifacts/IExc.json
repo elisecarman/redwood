@@ -50,6 +50,7 @@
 			"getNextID()": "2b0b086e",
 			"getOrders(bytes32,uint8)": "46e9658b",
 			"getTokens()": "aa6ca808",
+			"has_token(bytes32)": "46ca0f99",
 			"makeLimitOrder(bytes32,uint256,uint256,uint8)": "da28bd5c",
 			"makeMarketOrder(bytes32,uint256,uint8)": "be2a296b",
 			"withdraw(uint256,bytes32)": "a8d2021a"
@@ -91,6 +92,25 @@
 				{
 					"name": "",
 					"type": "uint256"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "ticker",
+					"type": "bytes32"
+				}
+			],
+			"name": "has_token",
+			"outputs": [
+				{
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"payable": false,
