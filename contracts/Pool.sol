@@ -66,7 +66,6 @@ contract Pool {
        IExc(dex).deposit(tokenAmount, token1T);
         IExc(dex).deposit(pineAmount, tokenPT);
         
-        
        updateOrders(amountToken1);
 
    }
@@ -90,10 +89,11 @@ contract Pool {
         
        
                 
-        amountTokenP = SafeMath.sub(walletP[msg.sender], pineAmount);
+        walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);
         wallet1[msg.sender] = SafeMath.sub(wallet1[msg.sender], tokenAmount);
-        amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
-            
+        
+        amountToken1 = SafeMath.sub(amountToken1, tokenAmount);
+        amountTokenP = SafeMath.sub(amountTokenP, pineAmount);   
             
         updateOrders(amountToken1);
            // }
@@ -103,6 +103,7 @@ contract Pool {
     
     
      function newPrice() private returns (uint) {
+        
         uint new_price = SafeMath.div(amountTokenP, amountToken1);
         price = new_price;
     }

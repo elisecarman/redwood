@@ -368,17 +368,14 @@ contract Exc is IExc{
              if (side == IExc.Side.BUY){
                  
                  require(contains_token[ticker]);
-                 //require(traderBalances[msg.sender][PIN] >= SafeMath.mul(amount, price));
                  require(ticker != PIN);
                  
-                 //uint id = allSellBooks[ticker].getMax().id;
-                 uint last = allSellBooks2[ticker].length - 1;
-                // Order memory max_order = allSellBooks2[ticker][last];
+                 
                 Order memory max_order = allSellBooks2[ticker][0];
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
-                 // uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
+                      
                   uint to_pay = (max_order.amount - max_order.filled) * max_order.price;
                   require(traderBalances[msg.sender][PIN] >= to_pay);
                   
@@ -396,17 +393,16 @@ contract Exc is IExc{
                             
                 //update balances- Buyer
                 traderBalances[msg.sender][ticker] += (max_order.amount - max_order.filled);
-                //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                
                  traderBalances[msg.sender][PIN] -= ((max_order.amount - max_order.filled) * max_order.price) ;
                 
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] -= (max_order.amount - max_order.filled);
-                //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                
                 traderBalances[max_order.trader][PIN] += ((max_order.amount - max_order.filled) * max_order.price);
                       
                   trade_ticker++;          
                  
-                // uint last2 = allSellBooks2[ticker].length - 1;
                  max_order = allSellBooks2[ticker][0];
                   }
                   
@@ -442,12 +438,11 @@ contract Exc is IExc{
                  require(traderBalances[msg.sender][ticker] >= amount);
                  require(ticker != PIN);
                  
-                  uint last = allBuyBooks2[ticker].length - 1;
+                
                 Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
-                  //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
                   remove_max(IExc.Side.BUY, ticker);
                   new_amount = new_amount - (max_order.amount - max_order.filled);
                   
@@ -462,21 +457,17 @@ contract Exc is IExc{
                             
                 //update balances- Buyer
                 traderBalances[msg.sender][ticker] -= (max_order.amount - max_order.filled);
-                //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                
                 traderBalances[msg.sender][PIN] += ((max_order.amount - max_order.filled) * max_order.price) ;
                 
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] += (max_order.amount - max_order.filled);
-                //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                
                 traderBalances[max_order.trader][PIN] -= ((max_order.amount - max_order.filled) * max_order.price);
-                   //update information     
+                      
                   trade_ticker++;          
-                 // delete(orders[id]); 
-                 // allOrders[id]= 0;
                  
-                  //uint last2 = allBuyBooks2[ticker].length - 1;
                  max_order = allBuyBooks2[ticker][0];
-                 // id = allSellBooks[ticker].getMax().id;
                   }
                   
                   max_order.filled += new_amount;
