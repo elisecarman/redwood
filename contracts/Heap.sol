@@ -111,3 +111,113 @@ library Heap{ // default max-heap
     self.indices[n.id] = i;
   }
 }
+
+//////////////BANK
+
+
+//  function insert3(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+//          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
+//             uint i;
+//             if (allSellBooks2[ticker].length == 0){
+//                 allSellBooks2[ticker].push(order);
+//             } else {
+            
+//           for (i = 0; i < allSellBooks2[ticker].length; i++) { 
+//              if (order.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+//               push_right(i, side, ticker);
+//               allSellBooks2[ticker][i] = order;
+//               return true;
+//           }
+//         }
+        
+//         allSellBooks2[ticker].push(order);
+//         return true;
+//         }
+            
+//         } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
+//              uint i;
+//             if (allBuyBooks2[ticker].length == 0){
+//                 allBuyBooks2[ticker].push(order);
+//             } else {
+            
+//           for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
+//              if (order.price <= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
+//               push_right(i, side, ticker);
+//               allBuyBooks2[ticker][i] = order;
+//               return true;
+//           }
+//         }
+        
+//         allSellBooks2[ticker].push(order);
+//         return true;
+//         }
+        
+//      }
+     
+//      return false;
+//      }
+
+
+
+
+
+
+//  function push_left(uint start, Side side, bytes32 ticker) internal{
+//         uint i;
+//          if (side == IExc.Side.SELL){
+//              for (i = start; i < allSellBooks2[ticker].length; i++){
+//                  if (i == SafeMath.sub(allSellBooks2[ticker].length, 1)){
+//                      delete allSellBooks2[ticker][i];
+//                      allSellBooks2[ticker].pop();
+//                  }
+//               allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.add(i, 1)];
+                 
+//              }
+//          } else if (side == IExc.Side.BUY){
+//              for (i = start; i < allBuyBooks2[ticker].length; i++){
+//                   if (i == SafeMath.sub(allBuyBooks2[ticker].length, 1)){
+//                      delete allBuyBooks2[ticker][i];
+//                      allBuyBooks2[ticker].pop();
+//                  }
+//               allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.add(i, 1)];
+                 
+//              } 
+//          }
+//     }
+
+
+
+
+//   function push_right(uint end, Side side, bytes32 ticker) internal{
+//      uint i;
+//       if (side == IExc.Side.SELL){
+//           uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
+          
+//           //duplicate end element
+//           allSellBooks2[ticker].push(allSellBooks2[ticker][last]);
+          
+          
+//           //readjust elements between insertion spot and new end
+//              for (i = last; i > end; i--){
+                 
+//               allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+//              }
+//          } else if (side == IExc.Side.BUY){
+//              uint last = SafeMath.sub(allBuyBooks2[ticker].length, 1);
+            
+//              allBuyBooks2[ticker].push(allBuyBooks2[ticker][last]);
+          
+          
+//           //readjust elements between insertion spot and new end
+//              for (i = last; i > end; i--){
+                 
+//               allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+//              }
+            
+//          }
+//      }
+
+
+     

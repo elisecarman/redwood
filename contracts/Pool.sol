@@ -40,9 +40,6 @@ contract Pool {
             tokenP = _token1;
             token1 = _token0;
         }
-        
-        idSell = 0;
-        idBuy = 0;
     }
     
     // todo: implement wallet functionality and trading functionality
@@ -50,7 +47,7 @@ contract Pool {
     // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
     // both tokens at the same time
     function deposit(uint tokenAmount, uint pineAmount) 
-    //payable
+    payable
     external {
     
       
@@ -64,19 +61,19 @@ contract Pool {
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
         
-        IERC20(token1).approve(address(this), tokenAmount); //dex
-        IERC20(tokenP).approve(address(this), pineAmount); //dex
+        IERC20(token1).approve(dex, tokenAmount);
+        IERC20(tokenP).approve(dex, pineAmount);
         
        IExc(dex).deposit(tokenAmount, token1T);
-       IExc(dex).deposit(pineAmount, tokenPT);
+        IExc(dex).deposit(pineAmount, tokenPT);
         
         
-        updateOrders(amountToken1);
+       // updateOrders(amountToken1);
 
    }
 
     function withdraw(uint tokenAmount, uint pineAmount) 
-    //payable
+    payable
     external {
      
     require(walletP[msg.sender] >= pineAmount);
@@ -100,7 +97,7 @@ contract Pool {
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
             
             
-       updateOrders(amountToken1);
+      //  updateOrders(amountToken1);
            // }
         
             

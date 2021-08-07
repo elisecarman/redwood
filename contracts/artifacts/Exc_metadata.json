@@ -183,67 +183,6 @@
 				"type": "function"
 			},
 			{
-				"constant": false,
-				"inputs": [
-					{
-						"components": [
-							{
-								"name": "id",
-								"type": "uint256"
-							},
-							{
-								"name": "trader",
-								"type": "address"
-							},
-							{
-								"name": "side",
-								"type": "uint8"
-							},
-							{
-								"name": "ticker",
-								"type": "bytes32"
-							},
-							{
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"name": "filled",
-								"type": "uint256"
-							},
-							{
-								"name": "price",
-								"type": "uint256"
-							},
-							{
-								"name": "date",
-								"type": "uint256"
-							}
-						],
-						"name": "order",
-						"type": "tuple"
-					},
-					{
-						"name": "side",
-						"type": "uint8"
-					},
-					{
-						"name": "ticker",
-						"type": "bytes32"
-					}
-				],
-				"name": "insert3",
-				"outputs": [
-					{
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"constant": true,
 				"inputs": [
 					{
@@ -505,28 +444,6 @@
 				"type": "function"
 			},
 			{
-				"constant": false,
-				"inputs": [
-					{
-						"name": "ticker",
-						"type": "bytes32"
-					},
-					{
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"name": "side",
-						"type": "uint8"
-					}
-				],
-				"name": "makeMarketOrder2",
-				"outputs": [],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"constant": true,
 				"inputs": [
 					{
@@ -728,15 +645,15 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x90f318e3a6d7aabcf73aba2b624a070ca3b3974c9965ad6917608e956beafe93",
+			"keccak256": "0x884c5cd8a72aeaf71a4005d81b45cd1103971adf8a3e9b0c96a6c4801282a700",
 			"urls": [
-				"bzzr://5cc42a65b9fe86d87d514dd604a7019227ab4f241a306c5ed1897ef5e4e49c18"
+				"bzzr://d94e1ab1601670db3cea318923cfd0a6f6a9757a6cb773ce515edd8bd965e128"
 			]
 		},
 		"contracts/Heap.sol": {
-			"keccak256": "0x44aabeb27f7ae52e44809dabe4ad067a801b2730f5e41368fc6b949b7fe62743",
+			"keccak256": "0x45466bcee45dd11c8076b9d5b4543c9b305412c0cdfa5cd85e6fc800d053d124",
 			"urls": [
-				"bzzr://bfe951ea38765281e85f9e4b8d6a8fd8ba504ca81f8458937a749fb9792e3cd4"
+				"bzzr://52e44c76506dce4eab29e9ae69064a8755914091977f62fc8c49a1ebbb048392"
 			]
 		},
 		"contracts/IExc.sol": {
