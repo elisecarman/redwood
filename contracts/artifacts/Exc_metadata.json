@@ -706,9 +706,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x4642b83f7b09503a5dab14578d90452e51fb6db318479017238a3e8533aab04c",
+			"keccak256": "0x371492eac6bb269fd3eafa5ed2e76df94def2e22ed875d6c066b8a35188568ac",
 			"urls": [
-				"bzzr://40b67a656a94f2d4b2be53e31d6bcde104afbd6f9784ca608f925464bf89f7c8"
+				"bzzr://2cf36bedc1a52db5395299ef9a846a7113eb767316524a95682c85fad34dd86b"
 			]
 		},
 		"contracts/Heap.sol": {
