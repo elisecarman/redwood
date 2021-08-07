@@ -68,7 +68,7 @@ contract Pool {
         IExc(dex).deposit(pineAmount, tokenPT);
         
         
-       // updateOrders(amountToken1);
+       updateOrders(amountToken1);
 
    }
 
@@ -97,7 +97,7 @@ contract Pool {
         amountToken1= SafeMath.sub(wallet1[msg.sender], tokenAmount);
             
             
-      //  updateOrders(amountToken1);
+        updateOrders(amountToken1);
            // }
         
             
