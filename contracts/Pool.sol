@@ -64,8 +64,8 @@ contract Pool {
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
         
-        IERC20(token1).approve(address(this), tokenAmount); //dex
-        IERC20(tokenP).approve(address(this), pineAmount);  //dex
+        IERC20(token1).approve(dex , tokenAmount); //dex  //address(this)
+        IERC20(tokenP).approve(dex , pineAmount);  //dex  //address(this)
         
        IExc(dex).deposit(tokenAmount, token1T);
         IExc(dex).deposit(pineAmount, tokenPT);
