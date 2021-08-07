@@ -235,7 +235,7 @@ contract Exc is IExc{
                 Order memory max_order = allSellBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((max_order.amount - max_order.filled) < new_amount){
+                  while ((max_order.amount - max_order.filled) <= new_amount){
                       
                   uint to_pay = (max_order.amount - max_order.filled) * max_order.price;
                   require(traderBalances[msg.sender][PIN] >= to_pay);
@@ -271,8 +271,11 @@ contract Exc is IExc{
                  max_order = allSellBooks2[ticker][0];
                   }
                   
+                  if (new_amount != 0){
+                  
                   uint to_pay = SafeMath.mul(new_amount, max_order.price);
                   require(traderBalances[msg.sender][PIN] >= to_pay);
+                  
                   
                  allSellBooks2[ticker][0].filled += new_amount;  
                   
@@ -293,7 +296,7 @@ contract Exc is IExc{
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] -= new_amount;
                 traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
-                             
+                  }             
                    
              } else if (side == IExc.Side.SELL){
                  
@@ -302,7 +305,7 @@ contract Exc is IExc{
                 Order memory max_order = allBuyBooks2[ticker][0];
                  uint new_amount = amount;
                  
-                  while ((max_order.amount - max_order.filled) < new_amount){
+                  while ((max_order.amount - max_order.filled) <= new_amount){
                     delete_e(max_order.id, max_order.ticker, IExc.Side.BUY);
                   
                   emit NewTrade(trade_ticker, 
@@ -330,7 +333,7 @@ contract Exc is IExc{
                  max_order = allBuyBooks2[ticker][0];
                   
                       
-                  }
+                  } if (new_amount != 0){
                   
                   allBuyBooks2[ticker][0].filled += new_amount;
                   
@@ -352,7 +355,7 @@ contract Exc is IExc{
                 traderBalances[max_order.trader][ticker] += new_amount;
                 traderBalances[max_order.trader][PIN] -= (new_amount * max_order.price);
                             
-                  
+                  }       
     }
 }
     

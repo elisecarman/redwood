@@ -1,3 +1,4 @@
+const { expectRevert } = require('@openzeppelin/test-helpers');
 const Pin = artifacts.require('dummy/Pin.sol');
 const Zrx = artifacts.require('dummy/Zrx.sol');
 const Exc = artifacts.require('Exc.sol');
@@ -125,6 +126,11 @@ const filled = await order[0].filled;
 
 
 assert.equal(filled, 1, 'market order fulfilled');
+
+});
+
+
+it('should create a market order and partially fill the first limit order', async () => {
 
 });
 

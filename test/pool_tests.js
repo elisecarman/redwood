@@ -1,3 +1,4 @@
+const { expectRevert } = require('@openzeppelin/test-helpers');
 const Pin = artifacts.require('dummy/Pin.sol');
 const Zrx = artifacts.require('dummy/Zrx.sol');
 const Exc = artifacts.require('Exc.sol');
@@ -47,58 +48,58 @@ contract('Pool', (accounts) => {
 await zrx.approve(poolAd,10, {from: trader1});
 await pin.approve(poolAd,10, {from: trader1});
 
-console.log("log 1");
-
 await pool.deposit(10, 10, {from: trader1});
-    //const wallet = await pool.wallet1[trader1];
     const wallet = await pool.get_balance(trader1, ZRX);
     const wallet2 = await pool.get_balance(trader1, PIN);
-    console.log(wallet);
-    console.log(wallet2);
     assert.equal(wallet2, 10, 'deposit executed');
     assert.equal(wallet, 10, 'deposit executed');
-
-//    await exc.withdraw(5, ZRX, {from: trader1});
-//    const balance = await pool.wallet1[trader1];
-//    assert.equal(balance, 5 , "withdraw executed");
     });
 
- it('should deposit/ withdraw tokens in pool', async () => {
-    await exc.addToken (ZRX, zrx.address);
-    await exc.addToken (PIN, pin.address);
+ it('withdraw/deposit - should revert for various reasons', async () => {
+    expectRevert.unspecified(pool.withdraw(100,100, { from: trader1 }),
+    "Should not allow withdraw more than deposited.");
 
-     let event = await fac.createPair(
-                            pin.address,
-                            zrx.address,
-                            pin.address,
-                            exc.address,
-                            PIN,
-                            ZRX
-                        );
-            let log = event.logs[0];
-            let poolAd = log.args.pair;
-             pool = await Pool.at(poolAd);
+     expectRevert.unspecified(pool.deposit(100,100, { from: trader1 }),
+        "Should not allow withdraw more than deposited.");
 
-    await zrx.mint(trader1, 1000);
-    await pin.mint(trader1, 1000);
-await zrx.approve(poolAd,10, {from: trader1});
-await pin.approve(poolAd,10, {from: trader1});
-
-console.log("log 1");
-
-await pool.deposit(10, 10, {from: trader1});
-    //const wallet = await pool.wallet1[trader1];
-    const wallet = await pool.get_balance(trader1, ZRX);
-    const wallet2 = await pool.get_balance(trader1, PIN);
-    console.log(wallet);
-    console.log(wallet2);
-    assert.equal(wallet2, 10, 'deposit executed');
-    assert.equal(wallet, 10, 'deposit executed');
-
-//    await exc.withdraw(5, ZRX, {from: trader1});
-//    const balance = await pool.wallet1[trader1];
-//    assert.equal(balance, 5 , "withdraw executed");
     });
+
+    it('should withdraw', async () => {
+        await exc.addToken (ZRX, zrx.address);
+        await exc.addToken (PIN, pin.address);
+
+         let event = await fac.createPair(
+                                pin.address,
+                                zrx.address,
+                                pin.address,
+                                exc.address,
+                                PIN,
+                                ZRX
+                            );
+                let log = event.logs[0];
+                let poolAd = log.args.pair;
+                 pool = await Pool.at(poolAd);
+
+        await zrx.mint(trader1, 1000);
+        await pin.mint(trader1, 1000);
+    await zrx.approve(poolAd,10, {from: trader1});
+    await pin.approve(poolAd,10, {from: trader1});
+
+    await pool.deposit(10, 10, {from: trader1});
+        //const wallet = await pool.wallet1[trader1];
+        const wallet = await pool.get_balance(trader1, ZRX);
+        const wallet2 = await pool.get_balance(trader1, PIN);
+        assert.equal(wallet2, 10, 'deposit executed');
+        assert.equal(wallet, 10, 'deposit executed');
+
+        await pool.withdraw(5, 5, {from: trader1});
+        const wallet3 = await pool.get_balance(trader1, ZRX);
+        const wallet4 = await pool.get_balance(trader1, PIN);
+          assert.equal(wallet3, 5, 'deposit executed');
+          assert.equal(wallet4, 5, 'deposit executed');
+        });
+
+
 
 
     });
