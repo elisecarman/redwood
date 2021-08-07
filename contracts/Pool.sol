@@ -18,6 +18,8 @@ contract Pool {
     uint private price;
     uint private idSell;
     uint private idBuy;
+    bool private idBuyCreated;
+    bool private idSellCreated;
     
     // todo: create wallet data structures
     mapping(address => uint) public walletP;
@@ -120,28 +122,26 @@ contract Pool {
         
          newPrice();
          
-         if (idBuy != 0 && idSell != 0 ){
+         if (idSellCreated && idBuyCreated ){
             
             IExc(dex).deleteLimitOrder(
                 idSell,
                 token1T,
                 IExc.Side.SELL);
+            
                 
             IExc(dex).deleteLimitOrder(
                 idBuy,
                 token1T,
                 IExc.Side.BUY); 
-         }
-        
-        //idBuy = IExc(dex).getNextID();
-        
+                
         idBuy = IExc(dex).makeLimitOrder(  //could have id = 1
                 token1T,
                 amount,  
                 price,
                 IExc.Side.BUY);
                 
-        //idSell = IExc(dex).getNextID(); 
+        
         
         idSell = IExc(dex).makeLimitOrder(
                 token1T,
@@ -149,10 +149,25 @@ contract Pool {
                 price,
                 IExc.Side.SELL);
                 
-        //           bytes32 ticker,
-        // uint amount,
-        // uint price,
-        // Side side)
+         } else {
+        
+        idBuy = IExc(dex).makeLimitOrder(  //could have id = 1
+                token1T,
+                amount,  
+                price,
+                IExc.Side.BUY);
+                
+        idBuyCreated = true;
+        
+        idSell = IExc(dex).makeLimitOrder(
+                token1T,
+                amount,    
+                price,
+                IExc.Side.SELL);
+        
+        idSellCreated = true;
+                
+    }
         
     }
 

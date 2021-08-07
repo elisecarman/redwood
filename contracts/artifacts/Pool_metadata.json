@@ -172,9 +172,9 @@
 			]
 		},
 		"redwood/contracts/Pool.sol": {
-			"keccak256": "0x158acf2c3066add4a7baddcabd5cf00f0e569e40e21ad1aaf27d42eee34f3cd4",
+			"keccak256": "0x7b15b2ba5073519410ef53e4f28632d7460a50f8c440b47cdcfdd90618a9fcae",
 			"urls": [
-				"bzzr://675937b4ef638982a403a624df8c52ce09f935fdc60dcab0d8d24c3765a97575"
+				"bzzr://1528fa1c27f89c42d3963b1006a5fd490ab27ea4a669303d1f352b1e0775339c"
 			]
 		},
 		"redwood/contracts/libraries/GSN/Context.sol": {

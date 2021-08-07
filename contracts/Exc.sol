@@ -39,7 +39,7 @@ contract Exc is IExc{
     /// token instead would suffice
     mapping(address => mapping(bytes32 => uint)) public traderBalances;
     
-    uint public id_ticker = 1;
+    uint public id_ticker;
     uint public trade_ticker;
    // uint public market_order_ticker;
     
