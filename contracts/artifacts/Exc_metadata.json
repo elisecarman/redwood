@@ -232,8 +232,13 @@
 						"type": "bytes32"
 					}
 				],
-				"name": "insert2",
-				"outputs": [],
+				"name": "insert3",
+				"outputs": [
+					{
+						"name": "",
+						"type": "bool"
+					}
+				],
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -601,12 +606,7 @@
 					}
 				],
 				"name": "insert",
-				"outputs": [
-					{
-						"name": "",
-						"type": "bool"
-					}
-				],
+				"outputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -706,9 +706,9 @@
 	},
 	"sources": {
 		"contracts/Exc.sol": {
-			"keccak256": "0x78220ff24cbc53c6ecb691272b6d8d36c8c14b0cbd1e30c09d74dc1e2394eaa1",
+			"keccak256": "0x439c73442edb6c1875c4a509ddc43d4151da1cf92d3277f68ab76003bb0f9bb3",
 			"urls": [
-				"bzzr://c9502d128e5c018fae61e2dd65b6e2c101545bc376421afd3ff77581079b97ba"
+				"bzzr://ba44a3c31b85d487244b129535d3ed9eeffa51b29c74751adaddf303442f526e"
 			]
 		},
 		"contracts/Heap.sol": {

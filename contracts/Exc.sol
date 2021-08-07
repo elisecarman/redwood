@@ -209,7 +209,7 @@ contract Exc is IExc{
         return order;
     }
     
-    function insert2(Order memory order, Side side, bytes32 ticker) public{
+    function insert(Order memory order, Side side, bytes32 ticker) public{
         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             //allSellBooks2.length++;
             uint i;
@@ -253,7 +253,7 @@ contract Exc is IExc{
     }
     
     
-    function delete_element2(uint id, Side side, bytes32 ticker) internal returns (bool){
+    function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
              uint i;
              uint swap_item = id;
@@ -263,7 +263,6 @@ contract Exc is IExc{
              if (allSellBooks2[ticker][i].id == swap_item){
                  if (i == allSellBooks2[ticker].length - 1){
                delete allSellBooks2[ticker][i];
-               //allSellBooks2[ticker].length--;
                allSellBooks2[ticker].pop();
                return true;
                  }
@@ -284,7 +283,6 @@ contract Exc is IExc{
              if (allBuyBooks2[ticker][i].id == swap_item){
                  if (i == allBuyBooks2[ticker].length - 1){
                delete allBuyBooks2[ticker][i];
-               //allBuyBooks2[ticker].length--;
                allBuyBooks2[ticker].pop();
                return true;
                  }
@@ -305,30 +303,10 @@ contract Exc is IExc{
         bytes32 ticker,
         Side side) external returns (bool) {
             require (contains_token[ticker] && ticker != PIN);
-            
-            // Order memory o = orders[id];
-            // if (msg.sender == o.trader){
-            //     Heap.Node memory removed;
-            //  if (o.side == IExc.Side.BUY){
-            //      //if cancel buy order, get refunded Pine?
-            //     removed = allBuyBooks[ticker].extractById(id);
-            //  }
-            // else if (o.side == IExc.Side.SELL){
-            //     //if cancel sell order, get refunded TOken 1
-            //     //orders[id] = 0;
-            //     removed = allSellBooks[ticker].extractById(id);
-            //     ///delete from order book
-            //     }
-                
-            // if (removed.id == 0 && removed.priority == 0){
-            //     return false;
-            // }
-            
+        
             
             bool  deleted = delete_element(id, side, ticker);
             return deleted;
-            //delete(orders[id]);
-            //allOrders[id] = 0;
             
     }
     
@@ -508,7 +486,7 @@ contract Exc is IExc{
     }
     
     
- function insert(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+ function insert3(Order memory order, Side side, bytes32 ticker)public returns (bool) {
          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             uint i;
             if (allSellBooks2[ticker].length == 0){
@@ -612,7 +590,7 @@ contract Exc is IExc{
 
 
      
-     function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
+     function delete_element3(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
              uint i;
              
