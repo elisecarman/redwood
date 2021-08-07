@@ -308,9 +308,7 @@ contract Exc is IExc{
         uint id,
         bytes32 ticker,
         Side side) external returns (bool) {
-            if (!contains_token[ticker] || ticker == PIN){
-                return false;
-            }
+            require (contains_token[ticker] && ticker != PIN);
             
             // Order memory o = orders[id];
             // if (msg.sender == o.trader){
@@ -400,6 +398,8 @@ contract Exc is IExc{
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
                   //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
+                  uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
+                  require(traderBalances[msg.sender][PIN] >= to_pay);
                   
                   remove_max(IExc.Side.SELL, ticker);
                   new_amount = new_amount - (max_order.amount - max_order.filled);
@@ -426,6 +426,9 @@ contract Exc is IExc{
                  uint last2 = allSellBooks2[ticker].length - 1;
                  max_order = allSellBooks2[ticker][last2];
                   }
+                  
+                  uint to_pay = SafeMath.mul(new_amount, max_order.price);
+                  require(traderBalances[msg.sender][PIN] >= to_pay);
                   
                   max_order.filled += new_amount;
                   
