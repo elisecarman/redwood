@@ -60,8 +60,8 @@ contract Pool {
         amountToken1 = SafeMath.add(wallet1[msg.sender], tokenAmount);
         
         
-        IERC20(token1).approve(dex, tokenAmount);
-        IERC20(tokenP).approve(dex, pineAmount);
+        IERC20(token1).approve(address(this), tokenAmount); //dex
+        IERC20(tokenP).approve(address(this), pineAmount);  //dex
         
        IExc(dex).deposit(tokenAmount, token1T);
         IExc(dex).deposit(pineAmount, tokenPT);
@@ -76,7 +76,7 @@ contract Pool {
     require(walletP[msg.sender] >= pineAmount);
     require(wallet1[msg.sender] >= tokenAmount);
         
-    walletP[msg.sender] = SafeMath.sub(walletP[msg.sender], pineAmount);   
+  
         
         IExc(dex).withdraw(tokenAmount, token1T);
         IExc(dex).withdraw(pineAmount, tokenPT);
