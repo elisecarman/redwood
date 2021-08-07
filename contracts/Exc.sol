@@ -160,28 +160,13 @@ contract Exc is IExc{
          
        
             
-           
-            
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
-        id_ticker ++;
+        id_ticker = SafeMath.add(id_ticker, 1);
         
         insert(newOrder, side, ticker);
         
-         
-        
-        // if (countS2 > countS1 || countB2 > countB1){
-        //     event.
-        // }
-        
-        //this might not be necessary anymore.
-       // orders[order_id] = newOrder; 
-       // allOrders.length++;
-        //allOrders[newOrder.id]= newOrder.id;
-    }
-    
-    
-        //  uint id;
+        //   uint id;
         // address trader;
         // Side side;
         // bytes32 ticker;
@@ -189,6 +174,10 @@ contract Exc is IExc{
         // uint filled;
         // uint price;
         // uint date;
+        
+    }
+    
+
         
     function make_Order(uint id, 
     address trader, 
@@ -209,7 +198,7 @@ contract Exc is IExc{
         return order;
     }
     
-    function insert(Order memory order, Side side, bytes32 ticker) public{
+    function insert2(Order memory order, Side side, bytes32 ticker) public{
         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             //allSellBooks2.length++;
             uint i;
@@ -253,7 +242,7 @@ contract Exc is IExc{
     }
     
     
-    function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
+    function delete_element2(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
              uint i;
              uint swap_item = id;
@@ -312,34 +301,14 @@ contract Exc is IExc{
     
     function remove_max(Side side, bytes32 ticker) internal{
         if (side == IExc.Side.SELL){
-        // Order memory swap_item = allSellBooks2[ticker][1];
-        // uint i;
-        // for (i = 0; i < allSellBooks2[ticker].length; i++) {
-        //     if (i == (allSellBooks2[ticker].length -1)){
-        //         delete allSellBooks2[ticker][i];
-        //         allSellBooks2[ticker].pop();
-        //         }
-        //  allSellBooks2[ticker][i] = swap_item;
-        //  swap_item = allSellBooks2[ticker][i + 1];
-        // }
+     
         uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
         delete allSellBooks2[ticker][last];
         allSellBooks2[ticker].pop();
         
         
     } else if (side == IExc.Side.BUY){
-    //     Order memory swap_item = allBuyBooks2[ticker][1];
-    //     uint i;
-    //     for (i = 0; i < allBuyBooks2[ticker].length; i++) {
-    //         if (i == (allBuyBooks2[ticker].length -1)){
-    //             delete allBuyBooks2[ticker][i];
-    //             allBuyBooks2[ticker].pop();
-    //             //allBuyBooks2[ticker].length--; 
-    //             }
-    //      allBuyBooks2[ticker][i] = swap_item;
-    //      swap_item = allBuyBooks2[ticker][i + 1];
-    //     }
-    // }
+   
     
     uint last = SafeMath.sub(allBuyBooks2[ticker].length, 1);
         delete allBuyBooks2[ticker][last];
@@ -486,11 +455,13 @@ contract Exc is IExc{
     }
     
     
- function insert3(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+ function insert(Order memory order, Side side, bytes32 ticker)public returns (bool) {
          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             uint i;
             if (allSellBooks2[ticker].length == 0){
                 allSellBooks2[ticker].push(order);
+                return true;
+                
             } else {
             
           for (i = 0; i < allSellBooks2[ticker].length; i++) { 
@@ -509,6 +480,8 @@ contract Exc is IExc{
              uint i;
             if (allBuyBooks2[ticker].length == 0){
                 allBuyBooks2[ticker].push(order);
+                return true;
+                
             } else {
             
           for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
@@ -536,7 +509,8 @@ contract Exc is IExc{
           uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
           
           //duplicate end element
-          allSellBooks2[ticker].push(allSellBooks2[ticker][last]);
+          Order memory repeat_last = allSellBooks2[ticker][last];
+          allSellBooks2[ticker].push(repeat_last);
           
           
           //readjust elements between insertion spot and new end
@@ -590,10 +564,10 @@ contract Exc is IExc{
 
 
      
-     function delete_element3(uint id, Side side, bytes32 ticker) internal returns (bool){
+     function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
+             if (allSellBooks2[ticker].length == 0){return false;}
              uint i;
-             
              for (i = 0; i < allSellBooks2[ticker].length; i++) {
                  
              if (allSellBooks2[ticker][i].id == id){
@@ -605,6 +579,7 @@ contract Exc is IExc{
              return false;
              
          } else if (side == IExc.Side.BUY){
+             if (allBuyBooks2[ticker].length == 0){return false;}
             uint i;
              uint swap_item = id;
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
