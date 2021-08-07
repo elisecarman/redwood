@@ -276,49 +276,45 @@ contract Exc is IExc{
             require (contains_token[ticker] && ticker != PIN);
         
             
-            // bool  deleted = delete_element(id, side, ticker);
-            // return deleted;
+            bool  deleted = delete_e(id, ticker, side);
+            return deleted;
             
-            if (side == IExc.Side.SELL){
+            // if (side == IExc.Side.SELL){
                 
-            uint length = allSellBooks2[ticker].length;
-            for (uint i = 0; i < length; i++) {
-              // Same trader is deleting it
-              if (allSellBooks2[ticker][i].id == id && allSellBooks2[ticker][i].trader == msg.sender) {
-                delete allSellBooks2[ticker][i];
-                for(uint j = 0; i + j < length - 1; j++) {
-                    allSellBooks2[ticker][i+j] = allSellBooks2[ticker][i+j+1];
-                }
-                allSellBooks2[ticker].pop();
-                return true;
-              }
-            }
+            // uint length = allSellBooks2[ticker].length;
+            // for (uint i = 0; i < length; i++) {
+            //   // Same trader is deleting it
+            //   if (allSellBooks2[ticker][i].id == id && allSellBooks2[ticker][i].trader == msg.sender) {
+            //     delete allSellBooks2[ticker][i];
+            //     for(uint j = 0; i + j < length - 1; j++) {
+            //         allSellBooks2[ticker][i+j] = allSellBooks2[ticker][i+j+1];
+            //     }
+            //     allSellBooks2[ticker].pop();
+            //     return true;
+            //   }
+            // }
           
-            } else if (side == IExc.Side.BUY){
-               uint length = allBuyBooks2[ticker].length;
-            for (uint i = 0; i < length; i++) {
-              // Same trader is deleting it
-              if (allBuyBooks2[ticker][i].id == id && allBuyBooks2[ticker][i].trader == msg.sender) {
-                delete allBuyBooks2[ticker][i];
-                for(uint j = 0; i + j < length - 1; j++) {
-                    allBuyBooks2[ticker][i+j] = allBuyBooks2[ticker][i+j+1];
-                }
-                allBuyBooks2[ticker].pop();
-                return true;
-              }
-            }  
-            }
+            // } else if (side == IExc.Side.BUY){
+            //   uint length = allBuyBooks2[ticker].length;
+            // for (uint i = 0; i < length; i++) {
+            //   // Same trader is deleting it
+            //   if (allBuyBooks2[ticker][i].id == id && allBuyBooks2[ticker][i].trader == msg.sender) {
+            //     delete allBuyBooks2[ticker][i];
+            //     for(uint j = 0; i + j < length - 1; j++) {
+            //         allBuyBooks2[ticker][i+j] = allBuyBooks2[ticker][i+j+1];
+            //     }
+            //     allBuyBooks2[ticker].pop();
+            //     return true;
+            //   }
+            // }  
+            // }
     }
     
     function delete_e(
         uint id,
         bytes32 ticker,
         Side side) internal returns (bool){
-            require (contains_token[ticker] && ticker != PIN);
         
-            
-            // bool  deleted = delete_element(id, side, ticker);
-            // return deleted;
             
             if (side == IExc.Side.SELL){
                 
@@ -402,12 +398,8 @@ contract Exc is IExc{
                   require(traderBalances[msg.sender][PIN] >= to_pay);
                   
                   
-                //   uint id,
-                //     bytes32 ticker,
-                //     Side side
-                
-                  //deleteLimitOrder(max_order.id, max_order.ticker, IExc.Side.SELL);
-                  remove_max(IExc.Side.SELL, ticker);
+                  delete_e(max_order.id, max_order.ticker, IExc.Side.SELL);
+                 // remove_max(IExc.Side.SELL, ticker);
                   
                  
                   
@@ -473,7 +465,8 @@ contract Exc is IExc{
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) < new_amount){
-                  remove_max(IExc.Side.BUY, ticker);
+                  //remove_max(IExc.Side.BUY, ticker);
+                    delete_e(max_order.id, max_order.ticker, IExc.Side.BUY);
                   
                   emit NewTrade(trade_ticker, 
                             max_order.id,
