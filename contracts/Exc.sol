@@ -66,7 +66,7 @@ contract Exc is IExc{
         
        if (side == IExc.Side.BUY){
            return allBuyBooks2[ticker];
-       } else if  (side == IExc.Side.BUY){
+       } else if  (side == IExc.Side.SELL){
            return allSellBooks2[ticker];
        }
         
@@ -129,7 +129,7 @@ contract Exc is IExc{
         uint amount,
         bytes32 ticker)
         external {
-            require(traderBalances[msg.sender][ticker] >= amount);
+            require(contains_token[ticker] && traderBalances[msg.sender][ticker] >= amount);
             //IERC20(tokens[ticker].tokenAddress).approve(address(this), amount);
             IERC20(tokens[ticker].tokenAddress).transfer(msg.sender, amount);
             
@@ -281,7 +281,7 @@ contract Exc is IExc{
              uint swap_item = id;
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
                  
-             if (allSellBooks2[ticker][i].id == swap_item){
+             if (allBuyBooks2[ticker][i].id == swap_item){
                  if (i == allBuyBooks2[ticker].length - 1){
                delete allBuyBooks2[ticker][i];
                //allBuyBooks2[ticker].length--;
@@ -449,7 +449,7 @@ contract Exc is IExc{
                  require(traderBalances[msg.sender][ticker] >= amount);
                  require(ticker != PIN);
                  
-                  uint last = allSellBooks2[ticker].length - 1;
+                  uint last = allBuyBooks2[ticker].length - 1;
                 Order memory max_order = allBuyBooks2[ticker][last];
                  uint new_amount = amount;
                  
@@ -481,7 +481,7 @@ contract Exc is IExc{
                  // delete(orders[id]); 
                  // allOrders[id]= 0;
                  
-                  uint last2 = allSellBooks2[ticker].length - 1;
+                  uint last2 = allBuyBooks2[ticker].length - 1;
                  max_order = allBuyBooks2[ticker][last2];
                  // id = allSellBooks[ticker].getMax().id;
                   }
@@ -615,11 +615,10 @@ contract Exc is IExc{
      function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
              uint i;
-             uint swap_item = id;
              
              for (i = 0; i < allSellBooks2[ticker].length; i++) {
                  
-             if (allSellBooks2[ticker][i].id == swap_item){
+             if (allSellBooks2[ticker][i].id == id){
                push_left(i, side, ticker);
                return true;
              }
@@ -632,7 +631,7 @@ contract Exc is IExc{
              uint swap_item = id;
              for (i = 0; i < allBuyBooks2[ticker].length; i++) {
                  
-             if (allSellBooks2[ticker][i].id == swap_item){
+             if (allBuyBooks2[ticker][i].id == swap_item){
                 push_left(i, side, ticker);
                 return true;
              }
