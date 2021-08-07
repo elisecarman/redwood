@@ -135,7 +135,7 @@ contract Pool {
         
         //idBuy = IExc(dex).getNextID();
         
-        idBuy = IExc(dex).makeLimitOrder(
+        idBuy = IExc(dex).makeLimitOrder(  //could have id = 1
                 token1T,
                 amount,  
                 price,
