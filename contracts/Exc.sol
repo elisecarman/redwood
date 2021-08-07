@@ -44,10 +44,6 @@ contract Exc is IExc{
    // uint public market_order_ticker;
     
     
- //   mapping(uint => Order) public orders;
-    //uint[] public allOrders;
-    // Order[] public allOrders;
-    
     /// @notice an event representing all the needed info regarding a new trade on the exchange
     event NewTrade(
         uint tradeId,
@@ -213,7 +209,7 @@ contract Exc is IExc{
         return order;
     }
     
-    function insert(Order memory order, Side side, bytes32 ticker) public{
+    function insert2(Order memory order, Side side, bytes32 ticker) public{
         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
             //allSellBooks2.length++;
             uint i;
@@ -257,7 +253,7 @@ contract Exc is IExc{
     }
     
     
-    function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
+    function delete_element2(uint id, Side side, bytes32 ticker) internal returns (bool){
          if (side == IExc.Side.SELL){
              uint i;
              uint swap_item = id;
@@ -397,8 +393,8 @@ contract Exc is IExc{
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
-                  //Heap.Node memory removedMax = allSellBooks[ticker].extractMax();
-                  uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
+                 // uint to_pay = SafeMath.mul(SafeMath.sub(max_order.amount, max_order.filled), max_order.price);
+                  uint to_pay = (max_order.amount - max_order.filled) * max_order.price;
                   require(traderBalances[msg.sender][PIN] >= to_pay);
                   
                   remove_max(IExc.Side.SELL, ticker);
@@ -415,11 +411,13 @@ contract Exc is IExc{
                             
                 //update balances- Buyer
                 traderBalances[msg.sender][ticker] += new_amount;
-                traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                 traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
                 
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] -= new_amount;
-                traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
                       
                   trade_ticker++;          
                  
@@ -471,12 +469,13 @@ contract Exc is IExc{
                             
                 //update balances- Buyer
                 traderBalances[msg.sender][ticker] += new_amount;
-                traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                //traderBalances[msg.sender][PIN] -= SafeMath.mul(new_amount, max_order.price) ;
+                traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
                 
                 //update balances- Seller
                 traderBalances[max_order.trader][ticker] -= new_amount;
-                traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
-                
+                //traderBalances[max_order.trader][PIN] += SafeMath.mul(new_amount, max_order.price);
+                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
                    //update information     
                   trade_ticker++;          
                  // delete(orders[id]); 
@@ -507,6 +506,143 @@ contract Exc is IExc{
       function getNextID() external returns (uint){
         return id_ticker;
     }
+    
+    
+ function insert(Order memory order, Side side, bytes32 ticker)public returns (bool) {
+         if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
+            uint i;
+            if (allSellBooks2[ticker].length == 0){
+                allSellBooks2[ticker].push(order);
+            } else {
+            
+          for (i = 0; i < allSellBooks2[ticker].length; i++) { 
+             if (order.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+              push_right(i, side, ticker);
+              allSellBooks2[ticker][i] = order;
+              return true;
+          }
+        }
+        
+        allSellBooks2[ticker].push(order);
+        return true;
+        }
+            
+        } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
+             uint i;
+            if (allBuyBooks2[ticker].length == 0){
+                allBuyBooks2[ticker].push(order);
+            } else {
+            
+          for (i = 0; i < allBuyBooks2[ticker].length; i++) { 
+             if (order.price <= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
+              push_right(i, side, ticker);
+              allBuyBooks2[ticker][i] = order;
+              return true;
+          }
+        }
+        
+        allBuyBooks2[ticker].push(order);
+        return true;
+        }
+        
+     }
+     
+     return false;
+     }
+
+
+
+  function push_right(uint end, Side side, bytes32 ticker) internal{
+     uint i;
+      if (side == IExc.Side.SELL){
+          uint last = SafeMath.sub(allSellBooks2[ticker].length, 1);
+          
+          //duplicate end element
+          allSellBooks2[ticker].push(allSellBooks2[ticker][last]);
+          
+          
+          //readjust elements between insertion spot and new end
+             for (i = last; i > end; i--){
+                 
+              allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+             }
+         } else if (side == IExc.Side.BUY){
+             uint last = SafeMath.sub(allBuyBooks2[ticker].length, 1);
+            
+             allBuyBooks2[ticker].push(allBuyBooks2[ticker][last]);
+          
+          
+          //readjust elements between insertion spot and new end
+             for (i = last; i > end; i--){
+                 
+              allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.sub(i, 1)];
+                 
+             }
+            
+         }
+     }
+
+
+
+ function push_left(uint start, Side side, bytes32 ticker) internal{
+        uint i;
+         if (side == IExc.Side.SELL){
+             for (i = start; i < allSellBooks2[ticker].length; i++){
+                 if (i == SafeMath.sub(allSellBooks2[ticker].length, 1)){
+                     delete allSellBooks2[ticker][i];
+                     allSellBooks2[ticker].pop();
+                 }
+              allSellBooks2[ticker][i]=  allSellBooks2[ticker][SafeMath.add(i, 1)];
+                 
+             }
+         } else if (side == IExc.Side.BUY){
+             for (i = start; i < allBuyBooks2[ticker].length; i++){
+                  if (i == SafeMath.sub(allBuyBooks2[ticker].length, 1)){
+                     delete allBuyBooks2[ticker][i];
+                     allBuyBooks2[ticker].pop();
+                 }
+              allBuyBooks2[ticker][i]=  allBuyBooks2[ticker][SafeMath.add(i, 1)];
+                 
+             } 
+         }
+    }
+
+
+
+
+     
+     function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
+         if (side == IExc.Side.SELL){
+             uint i;
+             uint swap_item = id;
+             
+             for (i = 0; i < allSellBooks2[ticker].length; i++) {
+                 
+             if (allSellBooks2[ticker][i].id == swap_item){
+               push_left(i, side, ticker);
+               return true;
+             }
+                 
+             }
+             return false;
+             
+         } else if (side == IExc.Side.BUY){
+            uint i;
+             uint swap_item = id;
+             for (i = 0; i < allBuyBooks2[ticker].length; i++) {
+                 
+             if (allSellBooks2[ticker][i].id == swap_item){
+                push_left(i, side, ticker);
+                return true;
+             }
+                 
+             }
+             return false;
+         }
+    }
+
+
 
 }
 

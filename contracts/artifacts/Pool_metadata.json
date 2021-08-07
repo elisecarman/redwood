@@ -19,8 +19,8 @@
 				],
 				"name": "withdraw",
 				"outputs": [],
-				"payable": true,
-				"stateMutability": "payable",
+				"payable": false,
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -128,8 +128,8 @@
 				],
 				"name": "deposit",
 				"outputs": [],
-				"payable": true,
-				"stateMutability": "payable",
+				"payable": false,
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -172,9 +172,9 @@
 			]
 		},
 		"contracts/Pool.sol": {
-			"keccak256": "0xc4747fd45af33baedbcf26c864e17d890b538fbb4fdf3ace287e89a1c289f07e",
+			"keccak256": "0xd89444203e0722c53c276270267084df38e17780e73c6c38271dfbeafb0f3249",
 			"urls": [
-				"bzzr://6f73f94458ef8313219a2f837a5c089bc1489f578504780fbbe5b91b7e6c9f7e"
+				"bzzr://e90cf7acab56bf3180effc66a73591c29f67a8d59e287d38fcdd871e46b1bf95"
 			]
 		},
 		"contracts/libraries/GSN/Context.sol": {

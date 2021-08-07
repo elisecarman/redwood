@@ -47,7 +47,6 @@ contract Pool {
     // todo: implement withdraw and deposit functions so that a single deposit and a single withdraw can unstake
     // both tokens at the same time
     function deposit(uint tokenAmount, uint pineAmount) 
-    payable
     external {
     
       
@@ -73,7 +72,6 @@ contract Pool {
    }
 
     function withdraw(uint tokenAmount, uint pineAmount) 
-    payable
     external {
      
     require(walletP[msg.sender] >= pineAmount);
