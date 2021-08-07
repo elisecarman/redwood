@@ -487,24 +487,26 @@ contract Exc is IExc{
     
  function insert(Order memory order, Side side, bytes32 ticker) public returns (bool) {
          if (side == IExc.Side.SELL){ //-> priority: LOWEST PRICE
+         //revert order
             if (allSellBooks2[ticker].length == 0){
                 allSellBooks2[ticker].push(order);
                 return true;
                 
-            } else if (allSellBooks2[ticker].length == 1){
-                if ( order.price > allSellBooks2[ticker][0].price){
-                    Order memory add = allSellBooks2[ticker][0];
-                    allSellBooks2[ticker].push(add);
-                    allSellBooks2[ticker][0] = order;
-                } else {
-                     allSellBooks2[ticker].push(order);
-                }
+            
+            // } else if (allSellBooks2[ticker].length == 1){
+            //     if ( order.price > allSellBooks2[ticker][0].price){
+            //         Order memory add = allSellBooks2[ticker][0];
+            //         allSellBooks2[ticker].push(add);
+            //         allSellBooks2[ticker][0] = order;
+            //     } else {
+            //          allSellBooks2[ticker].push(order);
+            //     }
                 
             }
             else {
             
           for (uint i = 0; i < allSellBooks2[ticker].length; i++) { 
-             if (order.price >= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
+             if (order.price <= allSellBooks2[ticker][i].price){  ///old sign <  //added an equal
               push_right(i, side, ticker);
               allSellBooks2[ticker][i] = order;
               return true;
@@ -516,23 +518,17 @@ contract Exc is IExc{
         }
         
         } else if( side == IExc.Side.BUY){ //-. PRIORITY: HIGHEST PRICE
+        //revert order
             if (allBuyBooks2[ticker].length == 0){
                 allBuyBooks2[ticker].push(order);
                 return true;
                 
-            } else if (allBuyBooks2[ticker].length == 1){
-                if ( order.price < allBuyBooks2[ticker][0].price){
-                    Order memory add = allBuyBooks2[ticker][0];
-                    allBuyBooks2[ticker].push(add);
-                    allBuyBooks2[ticker][0] = order;
-                } else {
-                     allBuyBooks2[ticker].push(order);
-            }
-            }
+            } 
+            
                 else {
             
           for (uint i = 0; i < allBuyBooks2[ticker].length; i++) { 
-             if (order.price <= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
+             if (order.price >= allBuyBooks2[ticker][i].price){  ///old sign <  //added an equal
               push_right(i, side, ticker);
               allBuyBooks2[ticker][i] = order;
               return true;
