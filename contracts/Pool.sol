@@ -113,6 +113,11 @@ contract Pool {
     
      function newPrice() private returns (uint) {
         
+        if (amountToken1 == 0){
+            price = 1;
+            return 1;
+        } 
+        
         uint new_price = SafeMath.div(amountTokenP, amountToken1);
         price = new_price;
         return new_price;

@@ -177,15 +177,9 @@
 	},
 	"sources": {
 		"redwood/contracts/Exc.sol": {
-			"keccak256": "0x9d250ba1c4bc59057f51c0b1cdb483a6666103e6812ed9575b1d34f2c24db9cf",
+			"keccak256": "0x4adc2a12fc7dbbae7e8e84c22dc5b84fe1ff0a515719b149a2165cac59bc3071",
 			"urls": [
-				"bzzr://7cfc0d0bb343f07b4137ac5855073d60f4927213dee5f388ba2e1f20428ea82c"
-			]
-		},
-		"redwood/contracts/Heap.sol": {
-			"keccak256": "0x6501477ab78f8db928e50d00316262bd36fd3a300fada63e2445f8f06861b8f3",
-			"urls": [
-				"bzzr://e443950e280d9643d517fbad277250b5f8d21bb374d17494a3eeda193e73b3d8"
+				"bzzr://42d6487b741055193269d24ab371f71c5955d2fe844259d411e07843ec37d8d2"
 			]
 		},
 		"redwood/contracts/IExc.sol": {
@@ -195,9 +189,9 @@
 			]
 		},
 		"redwood/contracts/Pool.sol": {
-			"keccak256": "0xb708ac3eed90c06ffecb687cc449d1c405318b8c6aac3742ec973ccf757fe13d",
+			"keccak256": "0x39a14caac99ce3816314463126d509efbe84a202a5f796a02ad19c6f29cc2e29",
 			"urls": [
-				"bzzr://200f78272a17867b7f56f484024159b306c6ef3667802b1762200d88d5f8bd0e"
+				"bzzr://c7c23c24db72a1b3e08c24b2607b216a982652c079dd455bdc769ed11d056e29"
 			]
 		},
 		"redwood/contracts/libraries/GSN/Context.sol": {

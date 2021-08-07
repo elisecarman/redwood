@@ -597,15 +597,9 @@
 	},
 	"sources": {
 		"redwood/contracts/Exc.sol": {
-			"keccak256": "0x666da63a89c09933260d6e76d74626f7fec10dd7a89a1ad65b31882beff51cde",
+			"keccak256": "0x4adc2a12fc7dbbae7e8e84c22dc5b84fe1ff0a515719b149a2165cac59bc3071",
 			"urls": [
-				"bzzr://830b9ecc66245398549c41d3b7a29c81de7b777b7ba69acf06d9ce33e155baf4"
-			]
-		},
-		"redwood/contracts/Heap.sol": {
-			"keccak256": "0x6501477ab78f8db928e50d00316262bd36fd3a300fada63e2445f8f06861b8f3",
-			"urls": [
-				"bzzr://e443950e280d9643d517fbad277250b5f8d21bb374d17494a3eeda193e73b3d8"
+				"bzzr://42d6487b741055193269d24ab371f71c5955d2fe844259d411e07843ec37d8d2"
 			]
 		},
 		"redwood/contracts/IExc.sol": {
