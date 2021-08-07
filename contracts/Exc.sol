@@ -158,7 +158,6 @@ contract Exc is IExc{
               require(ticker != PIN && contains_token[ticker] && traderBalances[msg.sender][PIN] >= SafeMath.mul(amount, price));
          }
          
-       
             
         uint order_id = id_ticker;
         Order memory newOrder = Order(order_id, msg.sender,side, ticker, amount, 0, price, now );
@@ -294,8 +293,39 @@ contract Exc is IExc{
             require (contains_token[ticker] && ticker != PIN);
         
             
-            bool  deleted = delete_element(id, side, ticker);
-            return deleted;
+            // bool  deleted = delete_element(id, side, ticker);
+            // return deleted;
+            
+            if (side == IExc.Side.SELL){
+                
+            uint length = allSellBooks2[ticker].length;
+            for (uint i = 0; i < length; i++) {
+              // Same trader is deleting it
+              if (allSellBooks2[ticker][i].id == id && allSellBooks2[ticker][i].trader == msg.sender) {
+                delete allSellBooks2[ticker][i];
+                for(uint j = 0; i + j < length - 1; j++) {
+                    allSellBooks2[ticker][i+j] = allSellBooks2[ticker][i+j+1];
+                }
+                allSellBooks2[ticker].pop();
+                return true;
+              }
+            }
+          
+            } else if (side == IExc.Side.BUY){
+               uint length = allBuyBooks2[ticker].length;
+            for (uint i = 0; i < length; i++) {
+              // Same trader is deleting it
+              if (allBuyBooks2[ticker][i].id == id && allBuyBooks2[ticker][i].trader == msg.sender) {
+                delete allBuyBooks2[ticker][i];
+                for(uint j = 0; i + j < length - 1; j++) {
+                    allBuyBooks2[ticker][i+j] = allBuyBooks2[ticker][i+j+1];
+                }
+                allBuyBooks2[ticker].pop();
+                return true;
+              }
+            }  
+            }
+            
             
     }
     
@@ -559,9 +589,6 @@ contract Exc is IExc{
              } 
          }
     }
-
-
-
 
      
      function delete_element(uint id, Side side, bytes32 ticker) internal returns (bool){
