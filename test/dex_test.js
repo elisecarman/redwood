@@ -34,19 +34,13 @@ await exc.addToken (PIN, pin.address);
 
 const tokens = await exc.getTokens();
 const token_count = tokens.length;
-console.log(token_count);
 
 assert.equal(token_count, 1, 'token added');
-
 await exc.addToken (ZRX, zrx.address);
-
-
 
 const tokens2 = await exc.getTokens();
 const token_count2 = tokens2.length;
-console.log(token_count2);
 assert.equal(token_count2, 2, 'token added');
-
 
 await exc.deposit(10, PIN, {from: trader1});
 assert.equal(await exc.traderBalances(trader1, PIN), 10, 'deposit executed');
@@ -55,45 +49,82 @@ await exc.withdraw(5, PIN, {from: trader1});
 assert.equal(await exc.traderBalances(trader1, PIN), 5 , "withdraw executed");
 });
 
-//it('should create one limit order', async () => {
-//await zrx.mint(trader1, 1000);
-//await zrx.approve(exc.address,10, {from: trader1});
-//await exc.addToken (ZRX, zrx.address);
-//await exc.deposit(10, ZRX, {from: trader1});
-//
-//await exc.makeLimitOrder(ZRX, 10, 1, SIDE.BUY, {from: trader1});
-//const orders = await exc.AllBuyBooks2[ZRX].length;
-//assert.equal(orders, 10, 'deposit executed');
-//
-//
-//});
 
 
+it('should add a token', async () => {
+await pin.mint(trader1, 1000);
+await pin.approve(exc.address,10, {from: trader1});
+await exc.addToken (PIN, pin.address);
+const tokens = await exc.getTokens();
+const token_count = tokens.length;
+assert.equal(token_count, 1, 'token added');
+await exc.addToken (ZRX, zrx.address);
+const tokens2 = await exc.getTokens();
+const token_count2 = tokens2.length;
+assert.equal(token_count2, 2, 'token added');
+});
 
-it('test insert', async () => {
+
+it('should create a limit order', async () => {
+await zrx.mint(trader1, 1000);
+await exc.addToken (ZRX, zrx.address);
+await exc.addToken (PIN, pin.address);
+
+await zrx.approve(exc.address,10, {from: trader1});
+await exc.deposit(10, ZRX, {from: trader1});
+await exc.makeLimitOrder(ZRX, 5, 1, SIDE.SELL, {from: trader1});
+const orders = await exc.getOrders(ZRX, SIDE.SELL);
+const length = orders.length;
+
+assert.equal(length, 1, 'order added');
+
+});
+
+it('should create and delete a limit order', async () => {
+await zrx.mint(trader1, 1000);
+await exc.addToken (ZRX, zrx.address);
+await exc.addToken (PIN, pin.address);
+
+await zrx.approve(exc.address,10, {from: trader1});
+await exc.deposit(10, ZRX, {from: trader1});
+await exc.makeLimitOrder(ZRX, 5, 1, SIDE.SELL, {from: trader1});
+const orders = await exc.getOrders(ZRX, SIDE.SELL);
+const length = orders.length;
+
+assert.equal(length, 1, 'order added');
+
+await exc.deleteLimitOrder(0, ZRX, SIDE.SELL, {from: trader1});
+
+const orders2 = await exc.getOrders(ZRX, SIDE.SELL);
+const length2 = orders2.length;
+
+assert.equal(length2, 0, 'order removed');
+});
+
+it('should create a market order and partially fill the first limit order', async () => {
+await exc.addToken (ZRX, zrx.address);
+await exc.addToken (PIN, pin.address);
+
 await zrx.mint(trader1, 1000);
 await zrx.approve(exc.address,10, {from: trader1});
-await exc.addToken (ZRX, zrx.address);
+await exc.deposit(10, ZRX, {from: trader1});
 
-//Buy: highest price first
-const order1 = await exc.make_Order(0, trader1, SIDE.BUY, ZRX, 1, 0, 1 );
-const order2 = await exc.make_Order(0, trader1, SIDE.BUY, ZRX, 1, 0, 2 );
-const order3 = await exc.make_Order(0, trader1, SIDE.BUY, ZRX, 1, 0, 3 );
-const order4 = await exc.make_Order(0, trader1, SIDE.BUY, ZRX, 1, 0, 4 );
+await pin.mint(trader2, 1000);
+await pin.approve(exc.address,100, {from: trader2});
+await exc.deposit(100, PIN, {from: trader2});
 
-console.log(order1);
-console.log(order2);
-console.log(order3);
-console.log(order4);
+await exc.makeLimitOrder(ZRX, 5, 1, SIDE.SELL, {from: trader1});
+const orders = await exc.getOrders(ZRX, SIDE.SELL);
+const length = orders.length;
 
-await exc.insert(order1, SIDE.BUY , ZRX);//SIDE.BUY
+assert.equal(length, 1, 'order added');
 
-const buy_book = await exc.getOrders(ZRX, SIDE.BUY);
-
-const order_book = buy_book[0];
-assert.equal(order_book.id, order1.id, 'order added');
+await exc.makeMarketOrder(ZRX,1,SIDE.BUY, {from: trader2});
+const order = await exc.getOrders(ZRX, SIDE.SELL);
+const filled = await order[0].filled;
 
 
+assert.equal(filled, 1, 'market order fulfilled');
 
 });
 

@@ -131,6 +131,29 @@
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"name": "trader",
+						"type": "address"
+					},
+					{
+						"name": "ticker",
+						"type": "bytes32"
+					}
+				],
+				"name": "get_balance",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -154,9 +177,9 @@
 	},
 	"sources": {
 		"redwood/contracts/Exc.sol": {
-			"keccak256": "0x73b4322916355ff8d6365f27d0568d435e17603489c4979eafe5e1130458fc97",
+			"keccak256": "0x9d250ba1c4bc59057f51c0b1cdb483a6666103e6812ed9575b1d34f2c24db9cf",
 			"urls": [
-				"bzzr://6e1dae62663a79e710be0f1aa5fa8d973bcc22ec2fbb97b81552b93ecb495de4"
+				"bzzr://7cfc0d0bb343f07b4137ac5855073d60f4927213dee5f388ba2e1f20428ea82c"
 			]
 		},
 		"redwood/contracts/Heap.sol": {
@@ -172,9 +195,9 @@
 			]
 		},
 		"redwood/contracts/Pool.sol": {
-			"keccak256": "0x7b15b2ba5073519410ef53e4f28632d7460a50f8c440b47cdcfdd90618a9fcae",
+			"keccak256": "0xb708ac3eed90c06ffecb687cc449d1c405318b8c6aac3742ec973ccf757fe13d",
 			"urls": [
-				"bzzr://1528fa1c27f89c42d3963b1006a5fd490ab27ea4a669303d1f352b1e0775339c"
+				"bzzr://200f78272a17867b7f56f484024159b306c6ef3667802b1762200d88d5f8bd0e"
 			]
 		},
 		"redwood/contracts/libraries/GSN/Context.sol": {

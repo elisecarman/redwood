@@ -179,5 +179,15 @@ contract Pool {
         }
     }
     
+    function get_balance (address trader, bytes32 ticker) public view returns (uint){
+        if (ticker == token1T){
+            return wallet1[trader];
+        } else if (ticker == tokenPT){
+           return walletP[trader]; 
+        }
+        
+        
+    }
+    
 
 }

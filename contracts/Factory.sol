@@ -42,8 +42,7 @@ contract Factory {
         allPairs.push(pair);
         emit PairCreated(token0, token1, pair, allPairs.length);
         
-        //should add Token?
-        //IExc()
+
     }
     
 }
