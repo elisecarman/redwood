@@ -337,7 +337,7 @@ contract Exc is IExc{
                 delete allSellBooks2[ticker][i];
                 allSellBooks2[ticker].pop();
             }
-            allSellBooks2[ticker][i] = allSellBooks2[ticker][i + 1];
+            allSellBooks2[ticker][i] = allSellBooks2[ticker][SafeMath.add(i, 1)];
         }
         
     } else if (side == IExc.Side.BUY){
@@ -347,7 +347,7 @@ contract Exc is IExc{
                 delete allBuyBooks2[ticker][i];
                 allBuyBooks2[ticker].pop();
             }
-            allBuyBooks2[ticker][i] = allBuyBooks2[ticker][i + 1];
+            allBuyBooks2[ticker][i] = allBuyBooks2[ticker][SafeMath.add(i, 1)];
         }
     
     }
@@ -356,7 +356,7 @@ contract Exc is IExc{
     // todo: implement makeMarketOrder, which will execute a market order on the current orderbook. The market order need not be
     // added to the book explicitly, since it should execute against a limit order immediately. Make sure you are getting rid of
     // completely filled limit orders!
-    function makeMarketOrder(
+    function makeMarketOrder2(
         bytes32 ticker,
         uint amount,
         Side side)
@@ -509,16 +509,6 @@ contract Exc is IExc{
                 allSellBooks2[ticker].push(order);
                 return true;
                 
-            
-            // } else if (allSellBooks2[ticker].length == 1){
-            //     if ( order.price > allSellBooks2[ticker][0].price){
-            //         Order memory add = allSellBooks2[ticker][0];
-            //         allSellBooks2[ticker].push(add);
-            //         allSellBooks2[ticker][0] = order;
-            //     } else {
-            //          allSellBooks2[ticker].push(order);
-            //     }
-                
             }
             else {
             
@@ -649,6 +639,145 @@ contract Exc is IExc{
          }
     }
 
+  // todo: implement makeMarketOrder, which will execute a market order on the current orderbook. The market order need not be
+    // added to the book explicitly, since it should execute against a limit order immediately. Make sure you are getting rid of
+    // completely filled limit orders!
+    function makeMarketOrder(
+        bytes32 ticker,
+        uint amount,
+        Side side)
+        external {
+            ///what does side indicate in the inputs?
+            //msg sender wants to buy an item
+            //msg sender wants to interract with the buy side (thus sell)
+            
+             if (side == IExc.Side.BUY){
+                 
+                 require(contains_token[ticker]);
+                 require(ticker != PIN);
+                 
+                 
+                Order memory max_order = allSellBooks2[ticker][0];
+                 uint new_amount = amount;
+                 
+                 
+                  while ((max_order.amount - max_order.filled) < new_amount){
+                      
+                  uint to_pay = (max_order.amount - max_order.filled) * max_order.price;
+                  require(traderBalances[msg.sender][PIN] >= to_pay);
+                  
+                  remove_max(IExc.Side.SELL, ticker);
+                  new_amount = new_amount - (max_order.amount - max_order.filled);
+                  
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
+                            msg.sender,
+                            max_order.amount - max_order.filled,
+                            max_order.price,
+                            now);
+                            
+                //update balances- Buyer
+                traderBalances[msg.sender][ticker] += (max_order.amount - max_order.filled);
+                
+                 traderBalances[msg.sender][PIN] -= ((max_order.amount - max_order.filled) * max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] -= (max_order.amount - max_order.filled);
+                
+                traderBalances[max_order.trader][PIN] += ((max_order.amount - max_order.filled) * max_order.price);
+                      
+                  trade_ticker++;          
+                 
+                 max_order = allSellBooks2[ticker][0];
+                  }
+                  
+                  uint to_pay = SafeMath.mul(new_amount, max_order.price);
+                  require(traderBalances[msg.sender][PIN] >= to_pay);
+                  
+                  max_order.filled += new_amount;
+                  
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
+                            msg.sender,
+                            new_amount,
+                            max_order.price,
+                            now);
+                            
+                traderBalances[msg.sender][ticker] += new_amount;
+                 traderBalances[msg.sender][PIN] -= (new_amount * max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] -= new_amount;
+                traderBalances[max_order.trader][PIN] += (new_amount * max_order.price);
+                             
+                            
+                trade_ticker++;    
+               // market_order_ticker++; 
+                 
+              //record event
+             } else if (side == IExc.Side.SELL){
+                 
+                  require(contains_token[ticker]);
+                 require(traderBalances[msg.sender][ticker] >= amount);
+                 require(ticker != PIN);
+                 
+                
+                Order memory max_order = allBuyBooks2[ticker][0];
+                 uint new_amount = amount;
+                 
+                  while ((max_order.amount - max_order.filled) < new_amount){
+                  remove_max(IExc.Side.BUY, ticker);
+                  new_amount = new_amount - (max_order.amount - max_order.filled);
+                  
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
+                            msg.sender,
+                            max_order.amount - max_order.filled,
+                            max_order.price,
+                            now);
+                            
+                //update balances- Seller
+                traderBalances[msg.sender][ticker] -= (max_order.amount - max_order.filled);
+                
+                traderBalances[msg.sender][PIN] += ((max_order.amount - max_order.filled) * max_order.price) ;
+                
+                //update balances- Buyer
+                traderBalances[max_order.trader][ticker] += (max_order.amount - max_order.filled);
+                
+                traderBalances[max_order.trader][PIN] -= ((max_order.amount - max_order.filled) * max_order.price);
+                      
+                  trade_ticker++;          
+                 
+                 max_order = allBuyBooks2[ticker][0];
+                  }
+                  
+                  max_order.filled += new_amount;
+                  
+                  emit NewTrade(trade_ticker, 
+                            max_order.id,
+                            ticker,
+                            max_order.trader,
+                            msg.sender,
+                            new_amount,
+                            max_order.price,
+                            now);
+                            
+                traderBalances[msg.sender][ticker] -= new_amount;
+                 traderBalances[msg.sender][PIN] += (new_amount * max_order.price) ;
+                
+                //update balances- Seller
+                traderBalances[max_order.trader][ticker] += new_amount;
+                traderBalances[max_order.trader][PIN] -= (new_amount * max_order.price);
+                            
+                trade_ticker++;    
+    }
+}
 
 
 }
