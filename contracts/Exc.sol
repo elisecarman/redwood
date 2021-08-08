@@ -219,6 +219,47 @@ contract Exc is IExc{
             
         }
     
+    function delete_e2(
+        uint id,
+        bytes32 ticker,
+        Side side) internal returns (bool){
+        
+            
+            if (side == IExc.Side.SELL){
+                
+            uint length = allSellBooks2[ticker].length;
+            
+            for (uint i = 0; i < length; i++) {
+              // Same trader is deleting it
+              if (allSellBooks2[ticker][i].id == id ) {
+                delete allSellBooks2[ticker][i];
+                for(uint j = 0; i + j < length - 1; j++) {
+                    allSellBooks2[ticker][i+j] = allSellBooks2[ticker][i+j+1];
+                }
+                allSellBooks2[ticker].pop();
+                return true;
+              }
+            }
+            
+          
+            } else if (side == IExc.Side.BUY){
+               uint length = allBuyBooks2[ticker].length;
+               
+            for (uint i = 0; i < length; i++) {
+              // Same trader is deleting it
+              if (allBuyBooks2[ticker][i].id == id ) {
+                delete allBuyBooks2[ticker][i];
+                for(uint j = 0; i + j < length - 1; j++) {
+                    allBuyBooks2[ticker][i+j] = allBuyBooks2[ticker][i+j+1];
+                }
+                allBuyBooks2[ticker].pop();
+                return true;
+              }
+            }  
+            }
+            
+            
+        }
    
     
     // todo: implement makeMarketOrder, which will execute a market order on the current orderbook. The market order need not be
@@ -244,7 +285,7 @@ contract Exc is IExc{
                   require(traderBalances[msg.sender][PIN] >= to_pay);
                   
                   
-                  delete_e(max_order.id, max_order.ticker, IExc.Side.SELL);
+                  delete_e2(max_order.id, max_order.ticker, IExc.Side.SELL);
                  
                  
                   
@@ -309,7 +350,7 @@ contract Exc is IExc{
                  uint new_amount = amount;
                  
                   while ((max_order.amount - max_order.filled) <= new_amount){
-                    delete_e(max_order.id, max_order.ticker, IExc.Side.BUY);
+                    delete_e2(max_order.id, max_order.ticker, IExc.Side.BUY);
                   
                   emit NewTrade(trade_ticker, 
                             max_order.id,
@@ -455,7 +496,11 @@ contract Exc is IExc{
          }
      }
 
+function getBalance(bytes32 ticker) external view returns (uint) {
+ return traderBalances[msg.sender][ticker];
+ }
 
 
 }
+
 
