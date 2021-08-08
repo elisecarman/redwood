@@ -130,8 +130,30 @@ assert.equal(filled, 1, 'market order fulfilled');
 });
 
 
-it('should create a market order and partially fill the first limit order', async () => {
+it('should completely fill the market order', async () => {
+await exc.addToken (ZRX, zrx.address);
+await exc.addToken (PIN, pin.address);
 
+await zrx.mint(trader1, 1000);
+await zrx.approve(exc.address,10, {from: trader1});
+await exc.deposit(10, ZRX, {from: trader1});
+
+await pin.mint(trader2, 1000);
+await pin.approve(exc.address,100, {from: trader2});
+await exc.deposit(100, PIN, {from: trader2});
+
+await exc.makeLimitOrder(ZRX, 5, 1, SIDE.SELL, {from: trader1});
+const orders = await exc.getOrders(ZRX, SIDE.SELL);
+const length = orders.length;
+
+assert.equal(length, 1, 'order added');
+
+await exc.makeMarketOrder(ZRX,5,SIDE.BUY, {from: trader2});
+const order = await exc.getOrders(ZRX, SIDE.SELL);
+const order_length = await order.length;
+
+
+assert.equal(order_length, 0, 'limit order fulfilled');
 });
 
 });
