@@ -48,6 +48,13 @@ assert.equal(await exc.traderBalances(trader1, PIN), 10, 'deposit executed');
 
 await exc.withdraw(5, PIN, {from: trader1});
 assert.equal(await exc.traderBalances(trader1, PIN), 5 , "withdraw executed");
+
+  expectRevert.unspecified(exc.deposit(1000,PIN, { from: trader1 }),
+        "Should not allow withdraw more than deposited.");
+
+expectRevert.unspecified(exc.withdraw(1000,PIN, { from: trader1 }),
+        "Should not allow withdraw more than deposited.");
+
 });
 
 
@@ -79,6 +86,10 @@ const length = orders.length;
 
 assert.equal(length, 1, 'order added');
 
+expectRevert.unspecified(exc.makeLimitOrder(PIN, 1000,1, SIDE.BUY, { from: trader1 }),
+        "cannot make limitOrder of token Pine");
+
+
 });
 
 it('should create and delete a limit order', async () => {
@@ -100,6 +111,10 @@ const orders2 = await exc.getOrders(ZRX, SIDE.SELL);
 const length2 = orders2.length;
 
 assert.equal(length2, 0, 'order removed');
+
+expectRevert.unspecified(exc.deleteLimitOrder(1, PIN, SIDE.BUY),
+        "cannot delete limitOrder of token Pine");
+
 });
 
 it('should create a market order and partially fill the first limit order', async () => {
@@ -126,11 +141,6 @@ const filled = await order[0].filled;
 
 
 assert.equal(filled, 1, 'market order fulfilled');
-
-});
-
-
-it('should create a market order and partially fill the first limit order', async () => {
 
 });
 

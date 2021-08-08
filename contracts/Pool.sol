@@ -127,8 +127,7 @@ contract Pool {
         
          newPrice();
          
-         //if (idSellCreated && idBuyCreated ){
-        if (idSellCreated && idBuyCreated ){
+         if (idSellCreated && idBuyCreated ){
             
             IExc(dex).deleteLimitOrder(
                 idSell,
